@@ -6,12 +6,10 @@ typedef struct {
 	int value;
 } element;
 
-
+int nextToken;
 
 void main() {
-	// file inupt
-	// lex()
-	// 
+	
 }
 
 //lex(){}
