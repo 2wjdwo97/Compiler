@@ -110,7 +110,7 @@ bool isIdentifier() {
 		currentState = table_Identifier[currentState][alphabet]; // state transition
 		
 		currentChar = getNextChar();
-		alphabet = charToIndex(ID_ALPHABET, currentChar, &currentState);  
+		alphabet = charToIndex(ID_ALPHABET, currentChar, &currentState);
 	}
 }
 
@@ -142,18 +142,42 @@ int charToIndex(char *ALPHABET, char inputChar, DfaState *currentState) { // cha
 		return i;
 }
 
-int binarySearch(int a[], int keyValue)
+int binarySearch(DfaElement dfaTable[], DfaState state)
 {
-	int low = 0, mid, high = sizeof(a) / sizeof(int) - 1;
+	int low = 0, mid, high = sizeof(dfaTable) / sizeof(DfaElement) - 1;
 	while (low <= high)
 	{
 		mid = (low + high) / 2;
-		if (keyValue < a[mid])
+		if (state < dfaTable[mid].row)
 			high = mid - 1;
-		else if (keyValue > a[mid])
+		else if (state > dfaTable[mid].row)
 			low = mid + 1;
 		else
 			return mid;
 	}
 	return -1;
+}
+
+DfaState changeState(DfaState currentState, int inputChar, DfaElement dfaTable[]) 
+{
+	int index = binarySearch(dfaTable, currentState);
+
+	if (index == -1)
+		return EMPTY;
+	else
+	{
+		for (int i = index; i >= 0; i--) {
+			if (dfaTable[i].row != currentState)
+				break;
+			else if (dfaTable[i].col == inputChar)
+				return dfaTable[i].value;
+		}
+		for (int i = index; i < sizeof(dfaTable) / sizeof(DfaElement); i++) {
+			if (dfaTable[i].row != currentState)
+				break;
+			else if (dfaTable[i].col == inputChar)
+				return dfaTable[i].value;
+		}
+		return EMPTY;
+	}
 }
