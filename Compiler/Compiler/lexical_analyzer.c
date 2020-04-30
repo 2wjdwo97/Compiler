@@ -124,23 +124,46 @@ char getNextChar() { // stream에서 next character 가져오는 함수
 	return NULL;
 }
 
-int charToIndex(char *ALPHABET, char inputChar, DfaState *currentState) { // change 'inputChar' (character form) to 'alphabet' (integer form) and return
-	int i = 0;
-
-	if (isalpha(inputChar))
-		inputChar = "a";
-	else if (isdigit(inputChar))
-		inputChar = "0";
-
-	for (i = 0; ALPHABET[i] != inputChar || i >= sizeof(ALPHABET) / sizeof(char); i++);
+int charToIndex(CharClass inputList[], char inputChar) {
 	
-	if (i >= sizeof(ALPHABET) / sizeof(char)) {
-		*currentState = EMPTY;
-		return 0;
+	for (int i = 0; i <= sizeof(inputList) / sizeof(int); i++) {
+		if (inputList[i] == inputChar)
+			return i;
+		else if (inputList[i] == NON_ZERO_DIGIT) {
+			if (isDigit(inputChar) && inputChar != ZERO)
+				return i;
+		}
+		else if (inputList[i] == LETTER && isLetter(inputChar))
+			return i;
 	}
-	else
-		return i;
+
+	return sizeof(inputList) / sizeof(int);
 }
+
+int charToIndex(char inputList[], char inputChar) {
+	int i = 0;
+	for (; inputList[i] != inputChar || i >= sizeof(inputList) / sizeof(char); i++);
+
+	return i;
+}
+
+//int charToIndex(char *ALPHABET, char inputChar, DfaState *currentState) { // change 'inputChar' (character form) to 'alphabet' (integer form) and return
+//	int i = 0;
+//
+//	if (isalpha(inputChar))
+//		inputChar = "a";
+//	else if (isdigit(inputChar))
+//		inputChar = "0";
+//
+//	for (i = 0; ALPHABET[i] != inputChar || i >= sizeof(ALPHABET) / sizeof(char); i++);
+//	
+//	if (i >= sizeof(ALPHABET) / sizeof(char)) {
+//		*currentState = EMPTY;
+//		return 0;
+//	}
+//	else
+//		return i;
+//}
 
 int binarySearch(DfaElement dfaTable[], DfaState state)
 {
@@ -158,7 +181,7 @@ int binarySearch(DfaElement dfaTable[], DfaState state)
 	return -1;
 }
 
-DfaState changeState(DfaState currentState, int inputChar, DfaElement dfaTable[]) 
+DfaState changeState(DfaState currentState, int inputIndex, DfaElement dfaTable[]) 
 {
 	int index = binarySearch(dfaTable, currentState);
 
@@ -169,13 +192,13 @@ DfaState changeState(DfaState currentState, int inputChar, DfaElement dfaTable[]
 		for (int i = index; i >= 0; i--) {
 			if (dfaTable[i].row != currentState)
 				break;
-			else if (dfaTable[i].col == inputChar)
+			else if (dfaTable[i].col == inputIndex)
 				return dfaTable[i].value;
 		}
 		for (int i = index; i < sizeof(dfaTable) / sizeof(DfaElement); i++) {
 			if (dfaTable[i].row != currentState)
 				break;
-			else if (dfaTable[i].col == inputChar)
+			else if (dfaTable[i].col == inputIndex)
 				return dfaTable[i].value;
 		}
 		return EMPTY;
