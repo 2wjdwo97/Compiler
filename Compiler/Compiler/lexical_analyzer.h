@@ -41,7 +41,7 @@ const DfaState table_FloatingPoint[10][4] = {
 };
 
 const DfaState table_Identifier[6][3] = {
-	/*							"			DIGIT		LETTER			*/	// FINAL_STATE = 1,2,3,4,5
+	/*							_			DIGIT		LETTER			*/	// FINAL_STATE = 1,2,3,4,5
 	/* START_STATE */	{		STATE_1	,	STATE_2	,	EMPTY			},
 	/* STATE_1 */		{		STATE_3	,	STATE_4	,	STATE_5			},
 	/* STATE_2 */		{		STATE_3	,	STATE_4	,	STATE_5			},
