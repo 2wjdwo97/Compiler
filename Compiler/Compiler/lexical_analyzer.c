@@ -5,113 +5,643 @@
 #include "lexical_analyzer.h"
 
 //----------- 전역변수 -------------
-FILE *in_fp, *fopen();
-bool isKeyword();
-bool isType();
-bool isIdentifier();
+FILE *in_fp;
 
-char nextChar; // ?
 int filePosition;
 char lexeme[100];
-int lexLen;
-int token;
-int nextToken;
+int nextToken; //
 bool endOfStream = false;
 //----------------------------------
 
 //----------- 함수 정의 ------------
-int charToIndex(char *alphabet,char inputChar, DfaState *currentState);
-int binarySearch(int a[], int keyValue);
-bool isKeyword();
-bool isType();
-bool isIdentifier();
-bool isInteger();
-bool isFloatingPoint();
+int charToIndex(CharClass [] , char);
+int charToIndex(char [], char);
 
+int binarySearch(DfaElement dfaTable[], DfaState state);
+
+
+bool isKeyword();
+bool isVarType();
+bool isBooleanStr();
+bool isIdentifier();
+
+bool isBitwiseOp();
+bool isComparisonOp();
+bool isAssignmentOp();
+
+bool isFloatingPoint();
+bool isLiteralStr();
+bool isSignedInt();
+
+bool isArithmeticOp();
+bool isComma();
+bool isBrace();
+bool isParen();
+bool isSemicolon();
+bool isWhitespace();
+
+bool inFinal(int final[],DfaState previousState);
+bool inFinal(int final, DfaState previousState);
+
+char getNextChar();
+DfaState changeState(DfaState currentState, int inputIndex, DfaElement dfaTable[]);
 //----------------------------------
 
+
+/*
+* Open file in w (write) mode.
+* "data/file1.txt" is complete path to create file
+*/
+
+
+/* Write data to file */
+//fputs(data, fPtr);
+
 void main() {
-	if ((in_fp = fopen("code.c", "r")) == NULL)
+	if ((in_fp = fopen("test.c", "r")) == NULL)
 		printf("Error: Cannot open file 'code.c'\n");
 	else {
+		FILE * out_fp;
+		out_fp = fopen("test.out", "w");
+
+		/* fopen() return NULL if last operation was unsuccessful */
+		if (out_fp == NULL)
+		{
+			printf("Unable to create file.\n");
+		}
+
 		do {
 			if (isKeyword()) {
-
+				fputs("keyword", out_fp);
+				fputs(" ", out_fp);
+				fputs(lexeme, out_fp);
+				fputs("\n", out_fp);
 			}
-			else if (isType()) {
-
+			else if (isVarType()) {
+				fputs("varType", out_fp);
+				fputs(" ", out_fp);
+				fputs(lexeme, out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isBooleanStr()) {
+				fputs("boolean", out_fp);
+				fputs(" ", out_fp);
+				fputs(lexeme, out_fp);
+				fputs("\n", out_fp);
 			}
 			else if (isIdentifier()) {
-
+				fputs("id", out_fp);
+				fputs(" ", out_fp);
+				fputs(lexeme, out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isBitwiseOp()) {
+				fputs("bitwiseOp", out_fp);
+				fputs(" ", out_fp);
+				fputs(lexeme, out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isComparisonOp()) {
+				fputs("comparisonOp", out_fp);
+				fputs(" ", out_fp);
+				fputs(lexeme, out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isAssignmentOp()) {
+				fputs("assignment", out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isFloatingPoint()) {
+				fputs("floatingPoint", out_fp);
+				fputs(" ", out_fp);
+				fputs(lexeme, out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isLiteralStr()) {
+				fputs("literalStr", out_fp);
+				fputs(" ", out_fp);
+				fputs(lexeme, out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isSignedInt()) {
+				fputs("signedInt", out_fp);
+				fputs(" ", out_fp);
+				fputs(lexeme, out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isArithmeticOp()) {
+				fputs("arithmeticOp", out_fp);
+				fputs(" ", out_fp);
+				fputs(lexeme, out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isComma()) {
+				fputs("comma", out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isBrace()) {
+				fputs("brace", out_fp);
+				fputs(" ", out_fp);
+				fputs(lexeme, out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isParen()) {
+				fputs("paren", out_fp);
+				fputs(" ", out_fp);
+				fputs(lexeme, out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isSemicolon()) {
+				fputs("semicolon", out_fp);
+				fputs("\n", out_fp);
+			}
+			else if (isWhitespace()) {
+				fputs("whitespace", out_fp);
+				fputs("\n", out_fp);
 			}
 		} while (nextToken != EOF);
+
+		fclose(out_fp);
+		fclose(in_fp);	
 	}
 }
 
 bool isKeyword() {
-	DfaState currentState = START_STATE;
-	char currentChar = getNextChar();
+	int i = 0;
 
-	int inputChar = charToIndex(currentChar, &currentChar);
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_Keyword, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = changeState(currentState, alphabet, table_Keyword); // table_Identifier[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_Keyword, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isVarType() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_VarType, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = changeState(currentState, alphabet, table_VarType); // table_Identifier[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_VarType, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isBooleanStr() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_BooleanStr, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = changeState(currentState, alphabet, table_BooleanStr); // table_Identifier[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_BooleanStr, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isIdentifier() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
 	
 	while (currentState != EMPTY && !endOfStream) {
-		currentState = table_Keyword[currentState][]; // currentChar를 char -> int 함수에 넣기
 		currentChar = getNextChar();
-	}
-}
-
-bool isType() {
-	DfaState currentState = START_STATE;
-	char currentChar = getNextChar();
-	const char* TYPE_ALPHABET = "a";
-
-	int inputChar = charToIndex(TYPE_ALPHABET, currentChar, &currentChar);
-
-	while (currentState != EMPTY && !endOfStream) {
-		currentState = table_Type[currentState][]; // currentChar를 char -> int 함수에 넣기
-		currentChar = getNextChar();
-	}
-}
-
-bool isInterger() {
-	DfaState currentState = START_STATE;
-	char currentChar = getNextChar();
-	const char* INTEGER_ALPHABET = "0-1"; // 0: 0, 1: Non Zero Digit
-
-	int inputChar = charToIndex(INTEGER_ALPHABET, currentChar, &currentChar);
-
-	while (currentState != EMPTY && !endOfStream) {
-		currentState = table_SignedInt[currentState][]; // currentChar를 char -> int 함수에 넣기
-		currentChar = getNextChar();
-	}
-}
-
-bool isFloatingPoint() {
-	DfaState currentState = START_STATE;
-	char currentChar = getNextChar();
-	const char* TYPE_ALPHABET = "a";
-
-	int inputChar = charToIndex(TYPE_ALPHABET, currentChar, &currentChar);
-
-	while (currentState != EMPTY && !endOfStream) {
-		currentState = table_Type[currentState][]; // currentChar를 char -> int 함수에 넣기
-		currentChar = getNextChar();
-	}
-}
-
-bool isIdentifier() {
-	const char ID_ALPHABET[] = "_0a"; // 0 :digit, a : letter
-
-	DfaState currentState = START_STATE;
-	char currentChar = getNextChar();
-	int alphabet = charToIndex(ID_ALPHABET, currentChar, &currentState);
-
-	while (currentState != EMPTY && !endOfStream) {
-		currentState = table_Identifier[currentState][alphabet]; // state transition
+		alphabet = charToIndex(inputList_Identifier, currentChar);
 		
-		currentChar = getNextChar();
-		alphabet = charToIndex(ID_ALPHABET, currentChar, &currentState);
+		lexeme[i++] = currentChar;
+		
+		previousState = currentState;
+		currentState = table_Identifier[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+	
+	if (inFinal(finalState_Identifier, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
 	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isBitwiseOp() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_BitwiseOp, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = table_BitwiseOp[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_BitwiseOp, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isComparisonOp() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_ComparisonOp, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = table_ComparisonOp[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_ComparisonOp, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isAssignmentOp() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_AssignmentOp, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = table_AssignmentOp[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_AssignmentOp, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isFloatingPoint() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_FloatingPoint, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = table_FloatingPoint[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_FloatingPoint, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isLiteralStr() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_LiteralStr, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = table_LiteralStr[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_LiteralStr, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isSignedInt() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_SignedInt, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = table_SignedInt[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_SignedInt, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isArithmeticOp() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_ArithmeticOp, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = table_ArithmeticOp[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_ArithmeticOp, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isComma() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_Comma, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = table_Comma[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_Comma, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isBrace() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_Brace, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = table_Brace[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_Brace, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isParen() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_Paren, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = table_Paren[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_Paren, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isSemicolon() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_Semicolon, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = table_Semicolon[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_Semicolon, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+bool isWhitespace() {
+	int i = 0;
+
+	DfaState previousState;
+	DfaState currentState = START_STATE;
+	char currentChar;
+	int alphabet;
+
+	while (currentState != EMPTY && !endOfStream) {
+		currentChar = getNextChar();
+		alphabet = charToIndex(inputList_Whitespace, currentChar);
+
+		lexeme[i++] = currentChar;
+
+		previousState = currentState;
+		currentState = table_Whitespace[currentState][alphabet]; // state transition
+	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
+
+	lexeme[i - 1] = '\0'; // EOS
+
+	if (inFinal(finalState_Whitespace, previousState)) { //이 전의 state가 final state인 경우
+		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
+		return true;
+	}
+	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
+		fseek(in_fp, -i, SEEK_CUR); // file pointer move backward (next to previous token)
+		return false;
+	}
+}
+
+bool inFinal(int final[], DfaState previousState) {
+	for (int i = 0; i >= sizeof(final) / sizeof(int); i++) {
+		if (final[i] == previousState)
+			return true;
+		else
+			return false;
+	}
+}
+bool inFinal(int final, DfaState previousState) {
+	if (final == previousState)
+		return true;
 }
 
 char getNextChar() { // stream에서 next character 가져오는 함수
