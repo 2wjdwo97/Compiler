@@ -2,10 +2,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <ctype.h>
-#include "lexical_analyzer.h"
+#include "header.h"
 
 //----------- 전역변수 -------------
-FILE *in_fp;
+FILE* in_fp;
 
 int filePosition;
 char lexeme[100];
@@ -14,8 +14,8 @@ bool endOfStream = false;
 //----------------------------------
 
 //----------- 함수 정의 ------------
-int charToIndex(CharClass [] , char);
-int charToIndex(char [], char);
+int charToIndex(CharClass[], char);
+int charToIndex(char[], char);
 
 int binarySearch(DfaElement dfaTable[], DfaState state);
 
@@ -44,14 +44,14 @@ bool inFinal(int final[], DfaState previousState);
 bool inFinal(int final, DfaState previousState);
 
 char getNextChar();
-DfaState changeState(DfaState currentState, int inputIndex, DfaElement dfaTable[]);
+DfaState changeState(DfaState currentState, int inputIndex, const DfaElement dfaTable[]);
 //----------------------------------
 
 void main() {
 	if ((in_fp = fopen("test.c", "r")) == NULL)
 		printf("Error: Cannot open file 'code.c'\n");
 	else {
-		FILE * out_fp;
+		FILE* out_fp;
 		out_fp = fopen("test.out", "w");
 
 		/* fopen() return NULL if last operation was unsuccessful */
@@ -152,7 +152,7 @@ void main() {
 		} while (nextToken != EOF);
 
 		fclose(out_fp);
-		fclose(in_fp);	
+		fclose(in_fp);
 	}
 }
 
@@ -250,19 +250,19 @@ bool isIdentifier() {
 	DfaState currentState = START_STATE;
 	char currentChar;
 	int alphabet;
-	
+
 	while (currentState != EMPTY && !endOfStream) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_Identifier, currentChar);
-		
+
 		lexeme[i++] = currentChar;
-		
+
 		previousState = currentState;
 		currentState = table_Identifier[currentState][alphabet]; // state transition
 	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
 
 	lexeme[i - 1] = '\0'; // EOS
-	
+
 	if (inFinal(finalState_Identifier, previousState)) { //이 전의 state가 final state인 경우
 		fseek(in_fp, -1, SEEK_CUR); // file pointer move backward
 		return true;
@@ -621,17 +621,17 @@ bool isWhitespace() {
 	}
 }
 
-bool inFinal(int final[], DfaState previousState) {
+bool inFinal(const int final[], DfaState previousState) {
 	for (int i = 0; i >= sizeof(final) / sizeof(int); i++) {
 		if (final[i] == previousState)
 			return true;
-		else
-			return false;
 	}
+	return false;
 }
-bool inFinal(int final, DfaState previousState) {
+bool inFinal(const int final, DfaState previousState) {
 	if (final == previousState)
 		return true;
+	return false;
 }
 
 char getNextChar() { // stream에서 next character 가져오는 함수
@@ -645,15 +645,15 @@ char getNextChar() { // stream에서 next character 가져오는 함수
 }
 
 int charToIndex(CharClass inputList[], char inputChar) {
-	
+
 	for (int i = 0; i <= sizeof(inputList) / sizeof(int); i++) {
 		if (inputList[i] == inputChar)
 			return i;
 		else if (inputList[i] == NON_ZERO_DIGIT) {
-			if (isDigit(inputChar) && inputChar != ZERO)
+			if (isdigit(inputChar) && inputChar != ZERO)
 				return i;
 		}
-		else if (inputList[i] == LETTER && isLetter(inputChar))
+		else if (inputList[i] == LETTER && isalpha(inputChar))
 			return i;
 	}
 
@@ -685,7 +685,7 @@ int charToIndex(char inputList[], char inputChar) {
 //		return i;
 //}
 
-int binarySearch(DfaElement dfaTable[], DfaState state)
+int binarySearch(const DfaElement dfaTable[], DfaState state)
 {
 	int low = 0, mid, high = sizeof(dfaTable) / sizeof(DfaElement) - 1;
 	while (low <= high)
@@ -701,7 +701,7 @@ int binarySearch(DfaElement dfaTable[], DfaState state)
 	return -1;
 }
 
-DfaState changeState(DfaState currentState, int inputIndex, DfaElement dfaTable[]) 
+DfaState changeState(DfaState currentState, int inputIndex, const DfaElement dfaTable[])
 {
 	int index = binarySearch(dfaTable, currentState);
 

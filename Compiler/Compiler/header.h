@@ -2,19 +2,19 @@
 
 typedef enum {
 	START_STATE = 0,
-	STATE_1,	STATE_2,	STATE_3,	STATE_4,	STATE_5,
-	STATE_6,	STATE_7,	STATE_8,	STATE_9,	STATE_10,
-	STATE_11,	STATE_12,	STATE_13,	STATE_14,	STATE_15,
-	STATE_16,	STATE_17,	STATE_18,	STATE_19,	STATE_20,
+	STATE_1, STATE_2, STATE_3, STATE_4, STATE_5,
+	STATE_6, STATE_7, STATE_8, STATE_9, STATE_10,
+	STATE_11, STATE_12, STATE_13, STATE_14, STATE_15,
+	STATE_16, STATE_17, STATE_18, STATE_19, STATE_20,
 	EMPTY
 } DfaState;
 
 typedef enum {
-	ZERO = '0',			NON_ZERO_DIGIT = '1',	LETTER = 'a',		UNDERLINE = '_',		QUOTATION = '"',
-	MINUS = '-',		PLUS = '+',				MULTIPLE = '*',		DIVIDE = '/',			EQUAL = '=',
-	LESS_THAN = '<',	GREATER_THAN = '>',		EXCLAMATION = '!',	SEMICOLON = ';',		COMMA = ',',
-	L_BRACE = '{',		R_BRACE = '}',			L_PAREN = '(',		R_PAREN = ')',			DOT = '.',
-	AND = '&',			OR = '|'			,	TAB = '\t',			SPACE = ' ',			NEWLINE = '\n'
+	ZERO = '0', NON_ZERO_DIGIT = '1', LETTER = 'a', UNDERLINE = '_', QUOTATION = '"',
+	MINUS = '-', PLUS = '+', MULTIPLE = '*', DIVIDE = '/', EQUAL = '=',
+	LESS_THAN = '<', GREATER_THAN = '>', EXCLAMATION = '!', SEMICOLON = ';', COMMA = ',',
+	L_BRACE = '{', R_BRACE = '}', L_PAREN = '(', R_PAREN = ')', DOT = '.',
+	AND = '&', OR = '|', TAB = '\t', SPACE = ' ', NEWLINE = '\n'
 }CharClass;
 
 CharClass inputList_SignedInt[3] = { ZERO, MINUS, NON_ZERO_DIGIT };
@@ -29,7 +29,7 @@ CharClass inputList_Semicolon[1] = { SEMICOLON };
 CharClass inputList_Brace[2] = { L_BRACE, R_BRACE };
 CharClass inputList_Paren[2] = { L_PAREN, R_PAREN };
 CharClass inputList_Comma[1] = { COMMA };
-CharClass inputList_Whitespace[3] = { TAB, SPACE, NEWLINE};
+CharClass inputList_Whitespace[3] = { TAB, SPACE, NEWLINE };
 
 //--------------------------------- Transition Table (using 2D ARRAY) ---------------------------------
 
@@ -67,7 +67,7 @@ const DfaState table_FloatingPoint[10][5] = {
 	/* STATE_9 */		{		EMPTY	,	STATE_9	,	STATE_8		,	EMPTY		,	EMPTY	}
 };
 
-const int finalState_Identifier[] = { 1, 2, 3, 4, 5};
+const int finalState_Identifier[] = { 1, 2, 3, 4, 5 };
 const DfaState table_Identifier[6][4] = {
 	/*							_			DIGIT		LETTER			*/	// FINAL_STATE = 1,2,3,4,5
 	/* START_STATE */	{		STATE_1	,	STATE_2	,	EMPTY		,	EMPTY	},
@@ -165,7 +165,7 @@ const DfaState table_Whitespace[2][4] = {
 typedef struct {
 	int row;
 	int col;
-	int value;
+	DfaState value;
 } DfaElement;
 
 char inputList_VarType[11] = { 'a', 'b', 'c', 'f', 'h', 'i', 'l', 'n', 'o', 'r', 't' };
