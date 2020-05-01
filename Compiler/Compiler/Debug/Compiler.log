@@ -1,0 +1,50 @@
+﻿  lexical_analyzer.c
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(18): warning C4028: 정식 매개 변수 1이(가) 선언과 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(44): warning C4028: 정식 매개 변수 1이(가) 선언과 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(174): warning C4090: '함수': 'const' 한정자가 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(179): warning C4047: '함수': 'int'의 간접 참조 수준이 'const int [5]'과(와) 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(179): warning C4024: 'inFinal': 형식 및 실제 매개 변수 1의 형식이 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(203): warning C4090: '함수': 'const' 한정자가 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(208): warning C4047: '함수': 'int'의 간접 참조 수준이 'const int [4]'과(와) 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(208): warning C4024: 'inFinal': 형식 및 실제 매개 변수 1의 형식이 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(232): warning C4090: '함수': 'const' 한정자가 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(237): warning C4047: '함수': 'int'의 간접 참조 수준이 'const int [2]'과(와) 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(237): warning C4024: 'inFinal': 형식 및 실제 매개 변수 1의 형식이 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(256): warning C4133: '함수': 'CharClass [4]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(266): warning C4047: '함수': 'int'의 간접 참조 수준이 'const int [5]'과(와) 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(266): warning C4024: 'inFinal': 형식 및 실제 매개 변수 1의 형식이 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(285): warning C4133: '함수': 'CharClass [4]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(295): warning C4047: '함수': 'int'의 간접 참조 수준이 'const int [4]'과(와) 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(295): warning C4024: 'inFinal': 형식 및 실제 매개 변수 1의 형식이 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(314): warning C4133: '함수': 'CharClass [4]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(324): warning C4047: '함수': 'int'의 간접 참조 수준이 'const int [6]'과(와) 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(324): warning C4024: 'inFinal': 형식 및 실제 매개 변수 1의 형식이 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(343): warning C4133: '함수': 'CharClass [1]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(372): warning C4133: '함수': 'CharClass [4]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(382): warning C4047: '함수': 'int'의 간접 참조 수준이 'const int [2]'과(와) 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(382): warning C4024: 'inFinal': 형식 및 실제 매개 변수 1의 형식이 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(401): warning C4133: '함수': 'CharClass [4]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(430): warning C4133: '함수': 'CharClass [3]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(440): warning C4047: '함수': 'int'의 간접 참조 수준이 'const int [4]'과(와) 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(440): warning C4024: 'inFinal': 형식 및 실제 매개 변수 1의 형식이 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(459): warning C4133: '함수': 'CharClass [4]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(469): warning C4047: '함수': 'int'의 간접 참조 수준이 'const int [4]'과(와) 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(469): warning C4024: 'inFinal': 형식 및 실제 매개 변수 1의 형식이 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(488): warning C4133: '함수': 'CharClass [1]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(517): warning C4133: '함수': 'CharClass [2]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(527): warning C4047: '함수': 'int'의 간접 참조 수준이 'const int [2]'과(와) 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(527): warning C4024: 'inFinal': 형식 및 실제 매개 변수 1의 형식이 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(546): warning C4133: '함수': 'CharClass [2]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(556): warning C4047: '함수': 'int'의 간접 참조 수준이 'const int [2]'과(와) 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(556): warning C4024: 'inFinal': 형식 및 실제 매개 변수 1의 형식이 서로 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(575): warning C4133: '함수': 'CharClass [1]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(604): warning C4133: '함수': 'CharClass [3]'과(와) 'char *' 사이의 형식이 호환되지 않습니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(624): warning C4028: 정식 매개 변수 1이(가) 선언과 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(632): error C2084: 'bool inFinal(int *,DfaState)' 함수에 이미 본문이 있습니다.
+  c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(624): note: 'inFinal'의 이전 정의를 참조하십시오.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(644): warning C4047: 'return': 'char'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(647): warning C4028: 정식 매개 변수 1이(가) 선언과 다릅니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(653): warning C4013: 'isDigit'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(656): warning C4013: 'isLetter'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(663): error C2084: 'int charToIndex(CharClass *,char)' 함수에 이미 본문이 있습니다.
+  c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\lexical_analyzer.c(647): note: 'charToIndex'의 이전 정의를 참조하십시오.

@@ -14,7 +14,7 @@ typedef enum {
 	MINUS = '-',		PLUS = '+',				MULTIPLE = '*',		DIVIDE = '/',			EQUAL = '=',
 	LESS_THAN = '<',	GREATER_THAN = '>',		EXCLAMATION = '!',	SEMICOLON = ';',		COMMA = ',',
 	L_BRACE = '{',		R_BRACE = '}',			L_PAREN = '(',		R_PAREN = ')',			DOT = '.',
-	AND = '&',			OR = '|'
+	AND = '&',			OR = '|'			,	TAB = '\t',			SPACE = ' ',			NEWLINE = '\n'
 }CharClass;
 
 CharClass inputList_SignedInt[3] = { ZERO, MINUS, NON_ZERO_DIGIT };
@@ -29,6 +29,7 @@ CharClass inputList_Semicolon[1] = { SEMICOLON };
 CharClass inputList_Brace[2] = { L_BRACE, R_BRACE };
 CharClass inputList_Paren[2] = { L_PAREN, R_PAREN };
 CharClass inputList_Comma[1] = { COMMA };
+CharClass inputList_Whitespace[3] = { TAB, SPACE, NEWLINE};
 
 //--------------------------------- Transition Table (using 2D ARRAY) ---------------------------------
 
@@ -78,7 +79,7 @@ const DfaState table_Identifier[6][4] = {
 };
 
 const int finalState_ArithmeticOp[] = { 1, 2, 3, 4 };
-const DfaState table_ArithmeticOp[5][4] = {
+const DfaState table_ArithmeticOp[5][5] = {
 	/*							+			=			*			/			*/	// FINAL_STATE = 1,2,3,4
 	/* START_STATE */	{		STATE_1	,	STATE_2	,	STATE_3	,	STATE_4		,	EMPTY	},
 	/* STATE_1 */		{		EMPTY	,	EMPTY	,	EMPTY	,	EMPTY		,	EMPTY	},
@@ -149,6 +150,13 @@ const DfaState table_Comma[2][2] = {
 	/*							;			*/	// FINAL_STATE = 1
 	/* START_STATE */	{		STATE_1	,	EMPTY	},
 	/* STATE_1 */		{		EMPTY	,	EMPTY	}
+};
+
+const DfaState finalState_Whitespace = STATE_1;
+const DfaState table_Whitespace[2][4] = {
+	/*							tab			space		newline	// FINAL_STATE = 1
+	/* START_STATE */	{		STATE_1	,	STATE_1	,	STATE_1	,	EMPTY },
+	/* STATE_1 */		{		STATE_1	,	STATE_1	,	STATE_1	,	EMPTY }
 };
 //----------------------------------------------------------------------------------------------
 

@@ -40,22 +40,12 @@ bool isParen();
 bool isSemicolon();
 bool isWhitespace();
 
-bool inFinal(int final[],DfaState previousState);
+bool inFinal(int final[], DfaState previousState);
 bool inFinal(int final, DfaState previousState);
 
 char getNextChar();
 DfaState changeState(DfaState currentState, int inputIndex, DfaElement dfaTable[]);
 //----------------------------------
-
-
-/*
-* Open file in w (write) mode.
-* "data/file1.txt" is complete path to create file
-*/
-
-
-/* Write data to file */
-//fputs(data, fPtr);
 
 void main() {
 	if ((in_fp = fopen("test.c", "r")) == NULL)
