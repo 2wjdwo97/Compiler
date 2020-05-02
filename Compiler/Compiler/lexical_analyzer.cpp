@@ -146,6 +146,7 @@ void main() {
 				fputs("\n", out_fp);
 			}
 			else if (isParen()) {
+				printf("Paren");
 				fputs("paren", out_fp);
 				fputs(" ", out_fp);
 				fputs(lexeme, out_fp);
@@ -156,6 +157,7 @@ void main() {
 				fputs("\n", out_fp);
 			}
 			else if (isWhitespace()) {
+				printf("Whitespace");
 				fputs("whitespace", out_fp);
 				fputs("\n", out_fp);
 			}
@@ -174,7 +176,7 @@ bool isKeyword() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_Keyword, currentChar);
 
@@ -203,7 +205,7 @@ bool isVarType() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_VarType, currentChar);
 
@@ -232,7 +234,7 @@ bool isBooleanStr() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_BooleanStr, currentChar);
 
@@ -261,7 +263,7 @@ bool isIdentifier() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_Identifier, currentChar);
 
@@ -290,7 +292,7 @@ bool isBitwiseOp() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_BitwiseOp, currentChar);
 
@@ -319,7 +321,7 @@ bool isComparisonOp() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_ComparisonOp, currentChar);
 
@@ -348,7 +350,7 @@ bool isAssignmentOp() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_AssignmentOp, currentChar);
 
@@ -377,7 +379,7 @@ bool isFloatingPoint() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_FloatingPoint, currentChar);
 
@@ -406,7 +408,7 @@ bool isLiteralStr() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_LiteralStr, currentChar);
 
@@ -435,7 +437,7 @@ bool isSignedInt() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_SignedInt, currentChar);
 
@@ -464,7 +466,7 @@ bool isArithmeticOp() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_ArithmeticOp, currentChar);
 
@@ -493,7 +495,7 @@ bool isComma() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_Comma, currentChar);
 
@@ -522,7 +524,7 @@ bool isBrace() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_Brace, currentChar);
 
@@ -551,7 +553,7 @@ bool isParen() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_Paren, currentChar);
 
@@ -580,7 +582,7 @@ bool isSemicolon() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_Semicolon, currentChar);
 
@@ -609,7 +611,7 @@ bool isWhitespace() {
 	char currentChar;
 	int alphabet;
 
-	while (currentState != EMPTY && !endOfStream) {
+	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList_Whitespace, currentChar);
 
@@ -656,7 +658,7 @@ char getNextChar() { // stream에서 next character 가져오는 함수
 
 int charToIndex(vector<CharClass> inputList, char inputChar) {
 
-	for (unsigned int i = 0; i <= inputList.size(); i++) {
+	for (unsigned int i = 0; i < inputList.size(); i++) {
 		if (inputList[i] == inputChar)
 			return i;
 		else if (inputList[i] == NON_ZERO_DIGIT) {
@@ -672,7 +674,7 @@ int charToIndex(vector<CharClass> inputList, char inputChar) {
 
 int charToIndex(vector<char> inputList, char inputChar) {
 	unsigned int i = 0;
-	for (; inputList[i] != inputChar && i < inputList.size(); i++);
+	for (; i < inputList.size() && inputList[i] != inputChar; i++);
 
 	return i;
 }

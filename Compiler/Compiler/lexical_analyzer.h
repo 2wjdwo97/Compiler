@@ -52,10 +52,10 @@ const vector<vector<DfaState>> table_SignedInt = {
 
 const DfaState finalState_LiteralStr = STATE_2;
 const vector<vector<DfaState>> table_LiteralStr = {
-	/*							"			DIGIT		LETTER			OTHER		// FINAL_STATE = 2
-	/* START_STATE */	{		STATE_1	,	EMPTY	,	EMPTY		,	EMPTY		},
-	/* STATE_1 */		{		STATE_2	,	STATE_1	,	STATE_1		,	EMPTY		},
-	/* STATE_2 */		{		EMPTY	,	EMPTY	,	EMPTY		,	EMPTY		}
+	/*							"			Zero		DIGIT		LETTER			OTHER		// FINAL_STATE = 2
+	/* START_STATE */	{		STATE_1	,	EMPTY	,	EMPTY	,	EMPTY		,	EMPTY		},
+	/* STATE_1 */		{		STATE_2	,	STATE_1	,	STATE_1	,	STATE_1		,	EMPTY		},
+	/* STATE_2 */		{		EMPTY	,	EMPTY	,	EMPTY	,	EMPTY		,	EMPTY		}
 };
 
 const vector<DfaState> finalState_FloatingPoint = { STATE_7, STATE_8 };
@@ -75,13 +75,13 @@ const vector<vector<DfaState>> table_FloatingPoint = {
 
 const vector<DfaState> finalState_Identifier = { STATE_1, STATE_2, STATE_3, STATE_4, STATE_5 };
 const vector<vector<DfaState>> table_Identifier = {
-	/*							_			DIGIT		LETTER			OTHER			// FINAL_STATE = 1,2,3,4,5
-	/* START_STATE */	{		STATE_1	,	STATE_2	,	EMPTY		,	EMPTY		},
-	/* STATE_1 */		{		STATE_3	,	STATE_4	,	STATE_5		,	EMPTY		},
-	/* STATE_2 */		{		STATE_3	,	STATE_4	,	STATE_5		,	EMPTY		},
-	/* STATE_3 */		{		STATE_3	,	STATE_4	,	STATE_5		,	EMPTY		},
-	/* STATE_4 */		{		STATE_3	,	STATE_4	,	STATE_5		,	EMPTY		},
-	/* STATE_5 */		{		STATE_3	,	STATE_4	,	STATE_5		,	EMPTY		}
+	/*							_			ZERO		DIGIT		LETTER			OTHER			// FINAL_STATE = 1,2,3,4,5
+	/* START_STATE */	{		STATE_2	,	EMPTY	,	EMPTY	,	STATE_1		,	EMPTY		},
+	/* STATE_1 */		{		STATE_4	,	STATE_5	,	STATE_5	,	STATE_3		,	EMPTY		},
+	/* STATE_2 */		{		STATE_4	,	STATE_5	,	STATE_5	,	STATE_3		,	EMPTY		},
+	/* STATE_3 */		{		STATE_4	,	STATE_5	,	STATE_5	,	STATE_3		,	EMPTY		},
+	/* STATE_4 */		{		STATE_4	,	STATE_5	,	STATE_5	,	STATE_3		,	EMPTY		},
+	/* STATE_5 */		{		STATE_4	,	STATE_5	,	STATE_5	,	STATE_3		,	EMPTY		}
 };
 
 const vector<DfaState> finalState_ArithmeticOp = { STATE_1, STATE_2, STATE_3, STATE_4 };

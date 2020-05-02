@@ -1,1 +1,1 @@
-while ( int a )
+ -2 

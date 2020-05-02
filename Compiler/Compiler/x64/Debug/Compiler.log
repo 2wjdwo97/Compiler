@@ -1,0 +1,3 @@
+﻿  소스.cpp
+c:\users\lg\desktop\정재\3학년\컴파일러\project\compiler\compiler\compiler\소스.cpp(689): warning C4309: '초기화 중': 상수 값이 잘립니다.
+  Compiler.vcxproj -> C:\Users\LG\Desktop\정재\3학년\컴파일러\project\Compiler\Compiler\x64\Debug\Compiler.exe
