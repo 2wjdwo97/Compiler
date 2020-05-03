@@ -23,6 +23,7 @@ typedef enum {
 	AND = '&',			OR = '|',				TAB = '\t',			SPACE = ' ',		NEWLINE = '\n'
 } CharClass;
 
+vector<CharClass> nullVector = {};
 vector<CharClass> inputList_SignedInt = { ZERO, MINUS, NON_ZERO_DIGIT };
 vector<CharClass> inputList_LiteralStr = { QUOTATION, ZERO, NON_ZERO_DIGIT, LETTER };
 vector<CharClass> inputList_FloatingPoint = { MINUS, ZERO, NON_ZERO_DIGIT, DOT };
@@ -50,7 +51,7 @@ const vector<vector<DfaState>> table_SignedInt = {
 	/* STATE_5 */		{		STATE_4	,	EMPTY	,	STATE_5		,	EMPTY		}
 };
 
-const DfaState finalState_LiteralStr = STATE_2;
+const vector<DfaState> finalState_LiteralStr = { STATE_2 };
 const vector<vector<DfaState>> table_LiteralStr = {
 	/*							"			Zero		DIGIT		LETTER			OTHER		// FINAL_STATE = 2
 	/* START_STATE */	{		STATE_1	,	EMPTY	,	EMPTY	,	EMPTY		,	EMPTY		},
@@ -107,7 +108,7 @@ const vector<vector<DfaState>> table_BitwiseOp = {
 	/* STATE_6 */		{		EMPTY	,	EMPTY	,	EMPTY	,	EMPTY		,	EMPTY		}
 };
 
-const DfaState finalState_AssignmentOp = STATE_1;
+const vector<DfaState> finalState_AssignmentOp = { STATE_1 };
 const vector<vector<DfaState>> table_AssignmentOp = {
 	/*							=			OTHER						// FINAL_STATE = 1
 	/* START_STATE */	{		STATE_1	,	EMPTY		},
@@ -128,7 +129,7 @@ const vector<vector<DfaState>> table_ComparisonOp = {
 	/* STATE_8 */		{		EMPTY	,	EMPTY	,	EMPTY	,	EMPTY		,	EMPTY		}
 };
 
-const DfaState finalState_Semicolon = STATE_1;
+const vector<DfaState> finalState_Semicolon = { STATE_1 };
 const vector<vector<DfaState>> table_Semicolon = {
 	/*							;			OTHER						// FINAL_STATE = 1
 	/* START_STATE */	{		STATE_1	,	EMPTY		},
@@ -151,14 +152,14 @@ const vector<vector<DfaState>> table_Paren = {
 	/* STATE_2 */		{		EMPTY	,	EMPTY	,	EMPTY		}
 };
 
-const DfaState finalState_Comma = STATE_1;
+const vector<DfaState> finalState_Comma = { STATE_1 };
 const vector<vector<DfaState>> table_Comma = {
 	/*							;			OTHER			// FINAL_STATE = 1
 	/* START_STATE */	{		STATE_1	,	EMPTY	},
 	/* STATE_1 */		{		EMPTY	,	EMPTY	}
 };
 
-const DfaState finalState_Whitespace = STATE_1;
+const vector<DfaState> finalState_Whitespace = {STATE_1};
 const vector<vector<DfaState>> table_Whitespace = {
 	/*							tab			space		newline		OTHER		// FINAL_STATE = 1
 	/* START_STATE */	{		STATE_1	,	STATE_1	,	STATE_1	,	EMPTY		},

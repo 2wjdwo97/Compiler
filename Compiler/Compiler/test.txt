@@ -1,3 +1,11 @@
+id whiles
 whitespace
-signedInt -2
+id int1
 whitespace
+varType int
+whitespace
+keyword while
+whitespace
+id whilefor
+whitespace
+id for_
