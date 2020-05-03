@@ -11,9 +11,11 @@ Whitespace
 VarType int
 Whitespace
 Identifier a
-SignedInt -3
+ArithmeticOp -
+SignedInt 3
 Paren )
 Whitespace
 Identifier whilefor
 Whitespace
 Identifier for_
+Whitespace
