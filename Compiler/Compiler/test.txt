@@ -1,11 +1,19 @@
-id whiles
-whitespace
-id int1
-whitespace
-varType int
-whitespace
-keyword while
-whitespace
-id whilefor
-whitespace
-id for_
+Identifier whiles
+Whitespace
+Identifier int1
+Whitespace
+VarType int
+Whitespace
+Keyword while
+Whitespace
+Paren (
+Whitespace
+VarType int
+Whitespace
+Identifier a
+SignedInt -3
+Paren )
+Whitespace
+Identifier whilefor
+Whitespace
+Identifier for_

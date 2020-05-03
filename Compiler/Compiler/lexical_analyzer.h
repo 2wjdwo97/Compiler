@@ -2,6 +2,8 @@
 #define _CRT_SECURE_NO_WARNINGS 
 #include <cstdio>
 #include <cctype>
+#include <iostream>
+#include <fstream>
 #include <vector>
 
 using namespace std;
@@ -24,6 +26,8 @@ typedef enum {
 } CharClass;
 
 vector<CharClass> nullVector = {};
+vector<CharClass> inputList_isPreviousTokenOperand = { R_PAREN, ZERO, NON_ZERO_DIGIT, LETTER };\
+
 vector<CharClass> inputList_SignedInt = { ZERO, MINUS, NON_ZERO_DIGIT };
 vector<CharClass> inputList_LiteralStr = { QUOTATION, ZERO, NON_ZERO_DIGIT, LETTER };
 vector<CharClass> inputList_FloatingPoint = { MINUS, ZERO, NON_ZERO_DIGIT, DOT };
@@ -87,7 +91,7 @@ const vector<vector<DfaState>> table_Identifier = {
 
 const vector<DfaState> finalState_ArithmeticOp = { STATE_1, STATE_2, STATE_3, STATE_4 };
 const vector<vector<DfaState>> table_ArithmeticOp = {
-	/*							+			=			*			/				OTHER			// FINAL_STATE = 1,2,3,4
+	/*							+			-			*			/				OTHER			// FINAL_STATE = 1,2,3,4
 	/* START_STATE */	{		STATE_1	,	STATE_2	,	STATE_3	,	STATE_4		,	EMPTY		},
 	/* STATE_1 */		{		EMPTY	,	EMPTY	,	EMPTY	,	EMPTY		,	EMPTY		},
 	/* STATE_2 */		{		EMPTY	,	EMPTY	,	EMPTY	,	EMPTY		,	EMPTY		},
@@ -98,7 +102,7 @@ const vector<vector<DfaState>> table_ArithmeticOp = {
 
 const vector<DfaState> finalState_BitwiseOp = { STATE_3, STATE_4, STATE_5, STATE_6 };
 const vector<vector<DfaState>> table_BitwiseOp = {
-	/*							+			=			*			/				OTHER			// FINAL_STATE = 3,4,5,6
+	/*							<			>			&			|				OTHER			// FINAL_STATE = 3,4,5,6
 	/* START_STATE */	{		STATE_1	,	STATE_2	,	STATE_3	,	STATE_4		,	EMPTY		},
 	/* STATE_1 */		{		STATE_5	,	EMPTY	,	EMPTY	,	EMPTY		,	EMPTY		},
 	/* STATE_2 */		{		EMPTY	,	STATE_6	,	EMPTY	,	EMPTY		,	EMPTY		},

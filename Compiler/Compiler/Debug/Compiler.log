@@ -1,3 +1,3 @@
 ﻿  lexical_analyzer.cpp
-C:\Users\LG\Desktop\정재\3학년\컴파일러\project\Compiler\Compiler\Compiler\lexical_analyzer.cpp(29,13): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
-  Compiler.vcxproj -> C:\Users\LG\Desktop\정재\3학년\컴파일러\project\Compiler\Compiler\Debug\Compiler.exe
+C:\Users\kio10\Desktop\compiler\Compiler\Compiler\lexical_analyzer.cpp(36,13): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+  Compiler.vcxproj -> C:\Users\kio10\Desktop\compiler\Compiler\Debug\Compiler.exe
