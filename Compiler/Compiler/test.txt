@@ -1,21 +1,2 @@
-Identifier whiles
-Whitespace
-Identifier int1
-Whitespace
-VarType int
-Whitespace
-Keyword while
-Whitespace
-Paren (
-Whitespace
-VarType int
-Whitespace
-Identifier a
-ArithmeticOp -
-SignedInt 3
-Paren )
-Whitespace
-Identifier whilefor
-Whitespace
-Identifier for_
+ArithmeticOp *
 Whitespace

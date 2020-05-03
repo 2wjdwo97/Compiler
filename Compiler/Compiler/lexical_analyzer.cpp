@@ -6,13 +6,12 @@ ifstream readFile("test.c");
 
 int filePosition;
 char lexeme[100];
-int nextToken; //
 bool endOfStream = false;
 bool isPreviousTokenOperand = false;
 //---------------------------------------------------------
 
 //----------------------- 함수 정의 -----------------------
-
+void countNewLine(int *);
 template <class T1, class T2, class T3>
 bool DfaAccepts(const T1, const T2, const vector<DfaState>, T3);
 
@@ -33,7 +32,9 @@ DfaState changeState(const DfaState currentState, int inputIndex, const vector<v
 //---------------------------------------------------------
 
 void main() {
-	
+	int currentLine = 1;
+	bool ErrorFound;
+
 	if (!readFile.is_open())
 	{
 		printf("Error: Cannot open file 'code.c'\n");
@@ -43,86 +44,111 @@ void main() {
 		ofstream writeFile("test.txt");
 
 		do {
+			ErrorFound = true;
+
 			if (DfaAccepts(inputList_Keyword, table_Keyword, finalState_Keyword, inputList_Identifier)) {
 				printf("Keyword");
 				isPreviousTokenOperand = false;
 				writeFile << "Keyword" << " " << lexeme << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_VarType, table_VarType, finalState_VarType, inputList_Identifier)) {
 				printf("VarType");
 				isPreviousTokenOperand = false;
 				writeFile << "VarType" << " " << lexeme << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_BooleanStr, table_BooleanStr, finalState_BooleanStr, inputList_Identifier)) {
 				printf("Boolean");
 				isPreviousTokenOperand = false;
 				writeFile << "Boolean" << " " << lexeme << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_Identifier, table_Identifier, finalState_Identifier, nullVector)) {
 				printf("Identifier");
 				isPreviousTokenOperand = true;
 				writeFile << "Identifier" << " " << lexeme << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_BitwiseOp, table_BitwiseOp, finalState_BitwiseOp, nullVector)) {
 				printf("BitwiseOp");
 				isPreviousTokenOperand = false;
 				writeFile << "BitwiseOp" << " " << lexeme << endl;
+				ErrorFound = false;
 			}
-			else if (DfaAccepts(inputList_VarType, table_VarType, finalState_VarType, inputList_Identifier)) {
+			else if (DfaAccepts(inputList_ComparisonOp, table_ComparisonOp, finalState_ComparisonOp, nullVector)) {
 				printf("ComparisonOp");
 				isPreviousTokenOperand = false;
 				writeFile << "ComparisonOp" << " " << lexeme << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_AssignmentOp, table_AssignmentOp, finalState_AssignmentOp, nullVector)) {
 				printf("Assignment");
 				isPreviousTokenOperand = false;
 				writeFile << "Assignment" << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_FloatingPoint, table_FloatingPoint, finalState_FloatingPoint, isPreviousTokenOperand)) {
 				printf("FloatingPoint");
 				isPreviousTokenOperand = true;
 				writeFile << "FloatingPoint" << " " << lexeme << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_LiteralStr, table_LiteralStr, finalState_LiteralStr, nullVector)) {
 				printf("literalStr");
 				isPreviousTokenOperand = false;
 				writeFile << "literalStr" << " " << lexeme << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_SignedInt, table_SignedInt, finalState_SignedInt, isPreviousTokenOperand)) {
 				printf("SignedInt");
 				isPreviousTokenOperand = true;
 				writeFile << "SignedInt" << " " << lexeme << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_ArithmeticOp, table_ArithmeticOp, finalState_ArithmeticOp, nullVector)) {
 				printf("ArithmeticOp");
 				isPreviousTokenOperand = false;
 				writeFile << "ArithmeticOp" << " " << lexeme << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_Comma, table_Comma, finalState_Comma, nullVector)) {
 				printf("Comma");
 				isPreviousTokenOperand = false;
 				writeFile << "Comma" << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_Brace, table_Brace, finalState_Brace, nullVector)) {
 				printf("Brace");
 				isPreviousTokenOperand = false;
 				writeFile << "Brace" << " " << lexeme << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_Paren, table_Paren, finalState_Paren, nullVector)) {
 				printf("Paren");
-				isPreviousTokenOperand = true;
+				if (lexeme[0] == ')')
+					isPreviousTokenOperand = true;
+				else
+					isPreviousTokenOperand = false;
 				writeFile << "Paren" << " " << lexeme << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_Semicolon, table_Semicolon, finalState_Semicolon, nullVector)) {
 				printf("Semicolon");
 				isPreviousTokenOperand = false;
 				writeFile << "Semicolon" << endl;
+				ErrorFound = false;
 			}
 			else if (DfaAccepts(inputList_Whitespace, table_Whitespace, finalState_Whitespace, nullVector)) {
 				printf("Whitespace");
 				writeFile << "Whitespace" << endl;
+				countNewLine(&currentLine);
+				ErrorFound = false;
 			}
-		} while (!endOfStream);
+		} while (!endOfStream && !ErrorFound);
+
+		if (ErrorFound)
+			printf("Error: line - %d", currentLine);
 
 		writeFile.close();
 		readFile.close();
@@ -159,7 +185,7 @@ bool DfaAccepts(const T1 inputList, const T2 table, const vector<DfaState> final
 		return true;
 	}
 	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
-		readFile.seekg(-i, ios::cur);; // file pointer move backward (next to previous token)
+		readFile.seekg(-i, ios::cur); // file pointer move backward (next to previous token)
 		endOfStream = false;
 		return false;
 	}
@@ -173,7 +199,7 @@ bool meetCondition(const vector<CharClass> condition, char currentChar) {
 }
 //SignedInteger, FloatingPoint 검사 : 이전 토큰이 { R_PAREN, ZERO, NON_ZERO_DIGIT, LETTER } 인 경우
 bool meetCondition(bool isPreviousTokenOperand, char currentChar) {
-	if (!isPreviousTokenOperand)
+	if (!isPreviousTokenOperand || lexeme[0] != '-')
 		return true;
 	else
 		return false;
@@ -265,4 +291,12 @@ DfaState changeState(const DfaState currentState, int inputIndex, const vector<D
 DfaState changeState(const DfaState currentState, int inputIndex, const vector<vector<DfaState>> dfaTable)
 {
 	return dfaTable[currentState][inputIndex];
+}
+
+void countNewLine(int *currentLine) {
+	int i;
+	for (i = 0; lexeme[i] != '\0'; i++) {
+		if(lexeme[i] == '\n')
+			*currentLine = *currentLine + 1;
+	}
 }
