@@ -1,3 +1,4 @@
 ﻿  lexical_analyzer.cpp
-C:\Users\LG\Desktop\정재\3학년\컴파일러\project\Compiler\Compiler\Compiler\lexical_analyzer.cpp(34,13): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+C:\Users\LG\Desktop\정재\3학년\컴파일러\project\Compiler\Compiler\Compiler\lexical_analyzer.cpp(36,13): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+C:\Users\LG\Desktop\정재\3학년\컴파일러\project\Compiler\Compiler\Compiler\lexical_analyzer.cpp(158,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   Compiler.vcxproj -> C:\Users\LG\Desktop\정재\3학년\컴파일러\project\Compiler\Compiler\Debug\Compiler.exe

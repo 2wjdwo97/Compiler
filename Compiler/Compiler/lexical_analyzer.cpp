@@ -8,6 +8,8 @@ int filePosition;
 char lexeme[100];
 bool endOfStream = false;
 bool isPreviousTokenOperand = false;
+
+vector<ErrorData> errorData;
 //---------------------------------------------------------
 
 //----------------------- 함수 정의 -----------------------
@@ -42,7 +44,6 @@ void main() {
 	}		
 	else {
 		ofstream writeFile("test.txt");
-
 		do {
 			ErrorFound = true;
 
@@ -145,10 +146,17 @@ void main() {
 				countNewLine(&currentLine);
 				ErrorFound = false;
 			}
-		} while (!endOfStream && !ErrorFound);
 
-		if (ErrorFound)
-			printf("Error: line - %d", currentLine);
+			if (ErrorFound) {
+				ErrorData newError;
+				newError.line = currentLine;
+				newError.wrongInput = readFile.get();
+				errorData.push_back(newError);
+			}
+		} while (!endOfStream);
+
+		for (int i = 0; i < errorData.size(); i++)
+			printf("\nErrorLine: %d, WrongInput: %c", errorData[i].line, errorData[i].wrongInput);
 
 		writeFile.close();
 		readFile.close();
@@ -177,8 +185,10 @@ bool DfaAccepts(const T1 inputList, const T2 table, const vector<DfaState> final
 
 	lexeme[i - 1] = '\0'; // EOS
 	
-	if (!currentChar)
+	if (!currentChar) {
 		i--;
+		readFile.clear();
+	}
 
 	if (inFinal(finalState, previousState) && meetCondition(condition, currentChar)) { //이 전의 state가 final state인 경우
 		readFile.seekg(-1, ios::cur); // file pointer move backward
@@ -186,7 +196,6 @@ bool DfaAccepts(const T1 inputList, const T2 table, const vector<DfaState> final
 	}
 	else { //getc move->read or read->move ?? i값 달라짐 상관없을 수도...
 		readFile.seekg(-i, ios::cur); // file pointer move backward (next to previous token)
-		endOfStream = false;
 		return false;
 	}
 }

@@ -8,6 +8,11 @@
 
 using namespace std;
 
+typedef struct {
+	int line;
+	char wrongInput;
+} ErrorData;
+
 typedef enum {
 	START_STATE = 0,
 	STATE_1, STATE_2, STATE_3, STATE_4, STATE_5,
