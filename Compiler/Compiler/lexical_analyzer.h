@@ -31,10 +31,10 @@ typedef enum {
 } CharClass;
 
 vector<CharClass> nullVector = {};
-vector<CharClass> inputList_isPreviousTokenOperand = { R_PAREN, ZERO, NON_ZERO_DIGIT, LETTER };\
+vector<CharClass> inputList_isPreviousTokenOperand = { R_PAREN, ZERO, NON_ZERO_DIGIT, LETTER };
 
 vector<CharClass> inputList_SignedInt = { ZERO, MINUS, NON_ZERO_DIGIT };
-vector<CharClass> inputList_LiteralStr = { QUOTATION, ZERO, NON_ZERO_DIGIT, LETTER };
+vector<CharClass> inputList_LiteralStr = { QUOTATION, ZERO, NON_ZERO_DIGIT, LETTER, SPACE };
 vector<CharClass> inputList_FloatingPoint = { MINUS, ZERO, NON_ZERO_DIGIT, DOT };
 vector<CharClass> inputList_Identifier = { UNDERLINE, ZERO, NON_ZERO_DIGIT, LETTER };
 vector<CharClass> inputList_ArithmeticOp = { PLUS, MINUS, MULTIPLE, DIVIDE };
@@ -62,15 +62,15 @@ const vector<vector<DfaState>> table_SignedInt = {
 
 const vector<DfaState> finalState_LiteralStr = { STATE_2 };
 const vector<vector<DfaState>> table_LiteralStr = {
-	/*							"			Zero		DIGIT		LETTER			OTHER		// FINAL_STATE = 2
-	/* START_STATE */	{		STATE_1	,	EMPTY	,	EMPTY	,	EMPTY		,	EMPTY		},
-	/* STATE_1 */		{		STATE_2	,	STATE_1	,	STATE_1	,	STATE_1		,	EMPTY		},
-	/* STATE_2 */		{		EMPTY	,	EMPTY	,	EMPTY	,	EMPTY		,	EMPTY		}
+	/*                     "         Zero      DIGIT      LETTER      SPACE      OTHER      // FINAL_STATE = 2
+	/* START_STATE */	{      STATE_1  ,   EMPTY   ,   EMPTY		,   EMPTY		,   EMPTY		,   EMPTY   },
+	/* STATE_1 */		{      STATE_2  ,   STATE_1	,   STATE_1		,   STATE_1		,   STATE_1		,   EMPTY   },
+	/* STATE_2 */		{      EMPTY	,   EMPTY   ,   EMPTY		,   EMPTY		,   EMPTY		,   EMPTY   }
 };
 
 const vector<DfaState> finalState_FloatingPoint = { STATE_7, STATE_8 };
 const vector<vector<DfaState>> table_FloatingPoint = {
-	/*							-			0			NON_ZERO_DIGIT		.				OTHER		// FINAL_STATE = 7,8
+	/*							-			ZERO		NON_ZERO_DIGIT		.				OTHER		// FINAL_STATE = 7,8
 	/* START_STATE */	{		STATE_1	,	STATE_2	,	STATE_3		,		EMPTY		,	EMPTY		},
 	/* STATE_1 */		{		EMPTY	,	STATE_2	,	STATE_3		,		EMPTY		,	EMPTY		},
 	/* STATE_2 */		{		EMPTY	,	EMPTY	,	EMPTY		,		STATE_4		,	EMPTY		},
@@ -85,13 +85,13 @@ const vector<vector<DfaState>> table_FloatingPoint = {
 
 const vector<DfaState> finalState_Identifier = { STATE_1, STATE_2, STATE_3, STATE_4, STATE_5 };
 const vector<vector<DfaState>> table_Identifier = {
-	/*							_			ZERO		DIGIT		LETTER			OTHER			// FINAL_STATE = 1,2,3,4,5
-	/* START_STATE */	{		STATE_2	,	EMPTY	,	EMPTY	,	STATE_1		,	EMPTY		},
-	/* STATE_1 */		{		STATE_4	,	STATE_5	,	STATE_5	,	STATE_3		,	EMPTY		},
-	/* STATE_2 */		{		STATE_4	,	STATE_5	,	STATE_5	,	STATE_3		,	EMPTY		},
-	/* STATE_3 */		{		STATE_4	,	STATE_5	,	STATE_5	,	STATE_3		,	EMPTY		},
-	/* STATE_4 */		{		STATE_4	,	STATE_5	,	STATE_5	,	STATE_3		,	EMPTY		},
-	/* STATE_5 */		{		STATE_4	,	STATE_5	,	STATE_5	,	STATE_3		,	EMPTY		}
+	/*							_			ZERO		NON_ZERO_DIGIT		LETTER			OTHER			// FINAL_STATE = 1,2,3,4,5
+	/* START_STATE */	{		STATE_2	,	EMPTY	,	EMPTY		,		STATE_1		,	EMPTY		},
+	/* STATE_1 */		{		STATE_4	,	STATE_5	,	STATE_5		,		STATE_3		,	EMPTY		},
+	/* STATE_2 */		{		STATE_4	,	STATE_5	,	STATE_5		,		STATE_3		,	EMPTY		},
+	/* STATE_3 */		{		STATE_4	,	STATE_5	,	STATE_5		,		STATE_3		,	EMPTY		},
+	/* STATE_4 */		{		STATE_4	,	STATE_5	,	STATE_5		,		STATE_3		,	EMPTY		},
+	/* STATE_5 */		{		STATE_4	,	STATE_5	,	STATE_5		,		STATE_3		,	EMPTY		}
 };
 
 const vector<DfaState> finalState_ArithmeticOp = { STATE_1, STATE_2, STATE_3, STATE_4 };
@@ -163,7 +163,7 @@ const vector<vector<DfaState>> table_Paren = {
 
 const vector<DfaState> finalState_Comma = { STATE_1 };
 const vector<vector<DfaState>> table_Comma = {
-	/*							;			OTHER			// FINAL_STATE = 1
+	/*							,			OTHER			// FINAL_STATE = 1
 	/* START_STATE */	{		STATE_1	,	EMPTY	},
 	/* STATE_1 */		{		EMPTY	,	EMPTY	}
 };

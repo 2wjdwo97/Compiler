@@ -1,3 +1,372 @@
-ArithmeticOp *
+VarType int
+Whitespace
+Identifier chars
+Paren (
+VarType bool
+Whitespace
+Identifier ischar
+Paren )
+Whitespace
+Brace {
+Whitespace
+VarType int
+Whitespace
+Identifier whileaaa
+Semicolon
+Whitespace
+VarType char
+Whitespace
+Keyword for
+Semicolon
+Whitespace
+VarType bool
+Whitespace
+Identifier ifbb
+Semicolon
+Whitespace
+VarType float
+Whitespace
+VarType int
+Semicolon
+Whitespace
+Identifier floatint
+Semicolon
+Whitespace
+Identifier a
+Whitespace
+Assignment
+Whitespace
+SignedInt 0
+SignedInt 0
+Semicolon
+Whitespace
+SignedInt 12
+Semicolon
+Whitespace
+ArithmeticOp -
+SignedInt 0
+SignedInt 34
+Semicolon
+Whitespace
+SignedInt -5
+Semicolon
+Whitespace
+SignedInt -1
+Identifier a
+Semicolon
+Whitespace
+Brace {
+Whitespace
+Identifier a
+Whitespace
+ArithmeticOp -
+Whitespace
+Paren (
+SignedInt -1
+Paren )
+Whitespace
+Identifier a
+Whitespace
+ArithmeticOp -
+Whitespace
+Paren (
+ArithmeticOp -
+SignedInt 0
+SignedInt 1
+Paren )
+Whitespace
+Identifier c
+ArithmeticOp -
+ArithmeticOp -
+Identifier b
+Whitespace
+ArithmeticOp -
+Whitespace
+SignedInt 1
+Whitespace
+ArithmeticOp -
+Whitespace
+SignedInt 2
+Whitespace
+ArithmeticOp -
+Whitespace
 SignedInt 3
+Whitespace
+ArithmeticOp -
+Whitespace
+SignedInt 0
+SignedInt 0
+Semicolon
+Whitespace
+Identifier e
+Whitespace
+Assignment
+Whitespace
+Keyword while
+Whitespace
+ArithmeticOp -
+Whitespace
+Identifier a
+Semicolon
+Whitespace
+Brace }
+Whitespace
+Identifier a0
+SignedInt 5
+Whitespace
+ArithmeticOp -
+Whitespace
+FloatingPoint 0.5
+Semicolon
+Whitespace
+FloatingPoint -0.0
+Semicolon
+Whitespace
+ArithmeticOp +
+FloatingPoint 0.511
+Semicolon
+Whitespace
+Identifier a
+Whitespace
+Assignment
+Whitespace
+SignedInt 0
+Semicolon
+Whitespace
+Identifier b
+Whitespace
+Assignment
+Whitespace
+SignedInt 5
+Semicolon
+Whitespace
+FloatingPoint 123.456
+Whitespace
+SignedInt 0
+FloatingPoint 0.1
+Semicolon
+Whitespace
+SignedInt 55
+SignedInt 0
+SignedInt 0
+Whitespace
+Identifier X
+Whitespace
+FloatingPoint 55.005
+SignedInt 5
+Whitespace
+Identifier X
+Whitespace
+SignedInt 55
+SignedInt 0
+SignedInt 50
+Whitespace
+Identifier O
+Semicolon
+Whitespace
+SignedInt 123
+Identifier abc
+Whitespace
+Assignment
+Whitespace
+Identifier trues
+Semicolon
+Whitespace
+Identifier falses
+Semicolon
+Whitespace
+literalStr ""
+Whitespace
+Boolean true
+Whitespace
+Assignment
+Whitespace
+literalStr "true"
+Semicolon
+Whitespace
+Boolean false
+Whitespace
+Assignment
+Whitespace
+Boolean false
+Whitespace
+literalStr "a     b     c"
+Whitespace
+Identifier i
+Comma
+Whitespace
+Identifier k
+Comma
+Whitespace
+Identifier abc
+Comma
+Whitespace
+Identifier ab_123
+Comma
+Whitespace
+Identifier func1
+Comma
+Whitespace
+Identifier func_
+Comma
+Whitespace
+Identifier _func_bar_
+Semicolon
+Whitespace
+Keyword while
+Whitespace
+Paren (
+Identifier int1a
+Paren )
+Semicolon
+Whitespace
+Identifier whie
+Semicolon
+Whitespace
+Identifier elseif
+Whitespace
+Keyword else
+Whitespace
+Keyword if
+Semicolon
+Whitespace
+Keyword for
+Whitespace
+Keyword for
+Whitespace
+Identifier forfor
+Semicolon
+Whitespace
+Identifier returna
+Semicolon
+Whitespace
+ArithmeticOp +
+ArithmeticOp -
+ArithmeticOp *
+ArithmeticOp /
+Whitespace
+VarType int
+Whitespace
+ArithmeticOp +
+Whitespace
+SignedInt 1
+Whitespace
+ArithmeticOp -
+Whitespace
+Paren (
+ArithmeticOp -
+Identifier a
+Paren )
+Whitespace
+ArithmeticOp -
+Whitespace
+Paren (
+SignedInt -3
+Paren )
+ArithmeticOp +
+ArithmeticOp +
+SignedInt 3
+Whitespace
+Identifier inta
+Whitespace
+ComparisonOp ==
+Whitespace
+Identifier b
+ComparisonOp !=
+ComparisonOp <=
+ComparisonOp >=
+Assignment
+Semicolon
+Whitespace
+Keyword while
+Whitespace
+Paren (
+SignedInt 1
+Whitespace
+ComparisonOp <
+Whitespace
+SignedInt 2
+Paren )
+Whitespace
+Keyword for
+Whitespace
+Paren (
+Identifier i
+Assignment
+SignedInt 0
+Semicolon
+Identifier i
+ComparisonOp >
+SignedInt -3
+Semicolon
+Identifier i
+ArithmeticOp +
+Paren )
+Whitespace
+Identifier a
+ComparisonOp <
+ComparisonOp >
+Identifier b
+Comma
+Whitespace
+ComparisonOp <
+Comma
+ComparisonOp >
+Comma
+ComparisonOp ==
+Comma
+ComparisonOp !=
+Comma
+ComparisonOp <=
+Comma
+ComparisonOp >=
+Whitespace
+SignedInt 1
+Identifier a
+ComparisonOp >
+SignedInt 23
+Identifier a_45c
+Whitespace
+SignedInt 1
+BitwiseOp <<
+SignedInt 3
+Comma
+Whitespace
+SignedInt 2
+BitwiseOp <<
+ComparisonOp <
+SignedInt 4
+Comma
+Whitespace
+SignedInt 4
+BitwiseOp >>
+SignedInt 3
+Comma
+Whitespace
+Identifier a
+BitwiseOp |
+Identifier a
+Comma
+Whitespace
+Identifier b
+BitwiseOp &
+Identifier b
+Comma
+Whitespace
+Identifier c
+BitwiseOp &
+BitwiseOp &
+Identifier c
+Comma
+Whitespace
+BitwiseOp <<
+BitwiseOp &
+Identifier a
+Whitespace
+Identifier t
+Comma
+Whitespace
+Identifier n
+Whitespace
+Brace }
 Whitespace
