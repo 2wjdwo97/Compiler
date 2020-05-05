@@ -1,8 +1,7 @@
 #include "lexical_analyzer.h"
 
 //----------------------- 전역변수 -----------------------
-//FILE* in_fp;
-ifstream readFile("test.c");
+ifstream readFile;
 
 int currentLine = 1;
 int filePosition;
@@ -15,19 +14,15 @@ vector<ErrorData> errorData;
 //---------------------------------------------------------
 
 //----------------------- 함수 선언 -----------------------
-void countNewLine();
+void WriteToken(ofstream* writeFile);
+
 template <class T1, class T2>
 void DfaAccepts(const T1, const T2, const vector<DfaState>, TokenName);
 
-void WriteToken(ofstream *writeFile);
 bool meetCondition(TokenName, char);
-//bool meetCondition(const vector<CharClass>, char);
-//bool meetCondition(bool, char);
-
 bool inFinal(const vector<DfaState> final, DfaState previousState);
 
 char getNextChar();
-
 int charToIndex(const vector<CharClass>, char);
 int charToIndex(const vector<char>, char);
 
@@ -35,18 +30,25 @@ int binarySearch(const vector<DfaElement> dfaTable, const DfaState state);
 DfaState changeState(const DfaState currentState, int inputIndex, const vector<DfaElement> dfaTable);
 DfaState changeState(const DfaState currentState, int inputIndex, const vector<vector<DfaState>> dfaTable);
 
+void countNewLine();
 //---------------------------------------------------------
 
-int main() {
+int main(int argc, char* argv[]) {
 	bool ErrorFound;
 
+	if (argc != 2) {
+		cout << "The execution command of the lexical analyzer: lexical_analyzer <input_file_name> \n";
+		exit(0);
+	}
+
+	readFile.open(argv[1]);
 	if (!readFile.is_open())
 	{
-		printf("Error: Cannot open file 'code.c'\n");
+		cout << "Error: Cannot open file : " << argv[1];
 		exit(0);
-	}		
+	}
 	else {
-		ofstream writeFile("test.txt");
+		ofstream writeFile("TokenTable.out");
 		do {
 			DfaAccepts(inputList_Keyword, table_Keyword, finalState_Keyword, Keyword);
 			DfaAccepts(inputList_VarType, table_VarType, finalState_VarType, VarType);
@@ -87,6 +89,7 @@ int main() {
 		readFile.close();
 	}
 }
+
 void WriteToken(ofstream *writeFile) {
 	switch (maxLengthToken.tokenName) {
 	case Keyword:
@@ -156,6 +159,7 @@ void WriteToken(ofstream *writeFile) {
 		countNewLine();
 	}
 }
+
 template <class T1, class T2> // T1 char CharClass, T2 vector<vector<State>>, vector<Element>
 void DfaAccepts(const T1 inputList, const T2 table, const vector<DfaState> finalState, TokenName tokenName) {
 	int i = 0;
@@ -207,20 +211,6 @@ bool meetCondition(TokenName tokenName, char currentChar) {
 		return true;
 	}
 }
-
-//bool meetCondition(const vector<CharClass> condition, char currentChar) {
-//	if (condition.size() == charToIndex(condition, currentChar))
-//		return true;
-//	else
-//		return false;
-//}
-////SignedInteger, FloatingPoint 검사 : 이전 토큰이 { R_PAREN, ZERO, NON_ZERO_DIGIT, LETTER } 인 경우
-//bool meetCondition(bool isPreviousTokenOperand, char currentChar) {
-//	if (!isPreviousTokenOperand || lexeme[0] != '-')
-//		return true;
-//	else
-//		return false;
-//}
 
 bool inFinal(const vector<DfaState> final, const DfaState previousState) {
 	for (unsigned int i = 0; i < final.size(); i++) {
