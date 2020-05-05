@@ -9,17 +9,6 @@
 
 using namespace std;
 
-typedef struct {
-	int line;
-	char wrongInput;
-} ErrorData;
-
-typedef struct {
-	int maxLength = 0;
-	TokenName tokenName;
-	string tokenValue;
-} MaxLengthToken;
-
 typedef enum {
 	START_STATE = 0,
 	STATE_1, STATE_2, STATE_3, STATE_4, STATE_5,
@@ -38,11 +27,23 @@ typedef enum {
 } CharClass;
 
 typedef enum {
-	Keyword = 0,
+	Null = 0,		Keyword,
 	VarType,		BooleanStr,		Identifier,		BitwiseOp,		ComparisonOp,
 	AssignmentOp,	FloatingPoint,	LiteralStr,		SignedInt,		ArithmeticOp,
 	Comma,			Brace,			Paren,			Semicolon,		Whitespace
-}TokenName;
+} TokenName;
+
+
+typedef struct {
+	int line;
+	char wrongInput;
+} ErrorData;
+
+typedef struct {
+	int maxLength = 0;
+	TokenName tokenName;
+	string tokenValue;
+} MaxLengthToken;
 
 vector<CharClass> nullVector = {};
 vector<CharClass> inputList_isPreviousTokenOperand = { R_PAREN, ZERO, NON_ZERO_DIGIT, LETTER };

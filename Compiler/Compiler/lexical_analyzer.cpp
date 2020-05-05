@@ -4,6 +4,7 @@
 //FILE* in_fp;
 ifstream readFile("test.c");
 
+int currentLine = 1;
 int filePosition;
 char lexeme[100];
 bool endOfStream = false;
@@ -13,11 +14,12 @@ MaxLengthToken maxLengthToken;
 vector<ErrorData> errorData;
 //---------------------------------------------------------
 
-//----------------------- 함수 정의 -----------------------
-void countNewLine(int *);
-template <class T1, class T2, class T3>
-bool DfaAccepts(const T1, const T2, const vector<DfaState>, TokenName);
+//----------------------- 함수 선언 -----------------------
+void countNewLine();
+template <class T1, class T2>
+void DfaAccepts(const T1, const T2, const vector<DfaState>, TokenName);
 
+void WriteToken(ofstream *writeFile);
 bool meetCondition(TokenName, char);
 //bool meetCondition(const vector<CharClass>, char);
 //bool meetCondition(bool, char);
@@ -36,7 +38,6 @@ DfaState changeState(const DfaState currentState, int inputIndex, const vector<v
 //---------------------------------------------------------
 
 int main() {
-	int currentLine = 1;
 	bool ErrorFound;
 
 	if (!readFile.is_open())
@@ -47,114 +48,36 @@ int main() {
 	else {
 		ofstream writeFile("test.txt");
 		do {
-			ErrorFound = true;
-
-			if (DfaAccepts(inputList_Keyword, table_Keyword, finalState_Keyword, Keyword)) {
-				printf("Keyword");
-				isPreviousTokenOperand = false;
-				writeFile << "Keyword" << " " << lexeme << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_VarType, table_VarType, finalState_VarType, VarType)) {
-				printf("VarType");
-				isPreviousTokenOperand = false;
-				writeFile << "VarType" << " " << lexeme << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_BooleanStr, table_BooleanStr, finalState_BooleanStr, BooleanStr)) {
-				printf("Boolean");
-				isPreviousTokenOperand = false;
-				writeFile << "Boolean" << " " << lexeme << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_Identifier, table_Identifier, finalState_Identifier, Identifier)) {
-				printf("Identifier");
-				isPreviousTokenOperand = true;
-				writeFile << "Identifier" << " " << lexeme << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_BitwiseOp, table_BitwiseOp, finalState_BitwiseOp, BitwiseOp)) {
-				printf("BitwiseOp");
-				isPreviousTokenOperand = false;
-				writeFile << "BitwiseOp" << " " << lexeme << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_ComparisonOp, table_ComparisonOp, finalState_ComparisonOp, ComparisonOp)) {
-				printf("ComparisonOp");
-				isPreviousTokenOperand = false;
-				writeFile << "ComparisonOp" << " " << lexeme << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_AssignmentOp, table_AssignmentOp, finalState_AssignmentOp, AssignmentOp)) {
-				printf("Assignment");
-				isPreviousTokenOperand = false;
-				writeFile << "Assignment" << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_FloatingPoint, table_FloatingPoint, finalState_FloatingPoint, FloatingPoint)) {
-				printf("FloatingPoint");
-				isPreviousTokenOperand = true;
-				writeFile << "FloatingPoint" << " " << lexeme << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_LiteralStr, table_LiteralStr, finalState_LiteralStr, LiteralStr)) {
-				printf("literalStr");
-				isPreviousTokenOperand = false;
-				writeFile << "literalStr" << " " << lexeme << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_SignedInt, table_SignedInt, finalState_SignedInt, SignedInt)) {
-				printf("SignedInt");
-				isPreviousTokenOperand = true;
-				writeFile << "SignedInt" << " " << lexeme << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_ArithmeticOp, table_ArithmeticOp, finalState_ArithmeticOp, ArithmeticOp)) {
-				printf("ArithmeticOp");
-				isPreviousTokenOperand = false;
-				writeFile << "ArithmeticOp" << " " << lexeme << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_Comma, table_Comma, finalState_Comma, Comma)) {
-				printf("Comma");
-				isPreviousTokenOperand = false;
-				writeFile << "Comma" << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_Brace, table_Brace, finalState_Brace, Brace)) {
-				printf("Brace");
-				isPreviousTokenOperand = false;
-				writeFile << "Brace" << " " << lexeme << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_Paren, table_Paren, finalState_Paren, Paren)) {
-				printf("Paren");
-				if (lexeme[0] == ')')
-					isPreviousTokenOperand = true;
-				else
-					isPreviousTokenOperand = false;
-				writeFile << "Paren" << " " << lexeme << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_Semicolon, table_Semicolon, finalState_Semicolon, Semicolon)) {
-				printf("Semicolon");
-				isPreviousTokenOperand = false;
-				writeFile << "Semicolon" << endl;
-				ErrorFound = false;
-			}
-			else if (DfaAccepts(inputList_Whitespace, table_Whitespace, finalState_Whitespace, Whitespace)) {
-				printf("Whitespace");
-				writeFile << "Whitespace" << endl;
-				countNewLine(&currentLine);
-				ErrorFound = false;
-			}
-
-			if (ErrorFound) {
+			DfaAccepts(inputList_Keyword, table_Keyword, finalState_Keyword, Keyword);
+			DfaAccepts(inputList_VarType, table_VarType, finalState_VarType, VarType);
+			DfaAccepts(inputList_BooleanStr, table_BooleanStr, finalState_BooleanStr, BooleanStr);
+			DfaAccepts(inputList_Identifier, table_Identifier, finalState_Identifier, Identifier);
+			DfaAccepts(inputList_BitwiseOp, table_BitwiseOp, finalState_BitwiseOp, BitwiseOp);
+			DfaAccepts(inputList_ComparisonOp, table_ComparisonOp, finalState_ComparisonOp, ComparisonOp);
+			DfaAccepts(inputList_AssignmentOp, table_AssignmentOp, finalState_AssignmentOp, AssignmentOp);
+			DfaAccepts(inputList_FloatingPoint, table_FloatingPoint, finalState_FloatingPoint, FloatingPoint);
+			DfaAccepts(inputList_LiteralStr, table_LiteralStr, finalState_LiteralStr, LiteralStr);
+			DfaAccepts(inputList_SignedInt, table_SignedInt, finalState_SignedInt, SignedInt);
+			DfaAccepts(inputList_ArithmeticOp, table_ArithmeticOp, finalState_ArithmeticOp, ArithmeticOp);
+			DfaAccepts(inputList_Comma, table_Comma, finalState_Comma, Comma);
+			DfaAccepts(inputList_Brace, table_Brace, finalState_Brace, Brace);
+			DfaAccepts(inputList_Paren, table_Paren, finalState_Paren, Paren);
+			DfaAccepts(inputList_Semicolon, table_Semicolon, finalState_Semicolon, Semicolon);
+			DfaAccepts(inputList_Whitespace, table_Whitespace, finalState_Whitespace, Whitespace);
+			
+			if (maxLengthToken.maxLength == 0) {
 				ErrorData newError;
 				newError.line = currentLine;
 				newError.wrongInput = readFile.get();
 				errorData.push_back(newError);
 			}
+			else {
+				WriteToken(&writeFile);
+				readFile.seekg(maxLengthToken.maxLength, ios_base::cur);
+			}
+			maxLengthToken.maxLength = 0;
+			maxLengthToken.tokenName = Null;
+			
 		} while (!endOfStream);
 
 		for (unsigned int i = 0; i < errorData.size(); i++)
@@ -164,12 +87,79 @@ int main() {
 		readFile.close();
 	}
 }
-
+void WriteToken(ofstream *writeFile) {
+	switch (maxLengthToken.tokenName) {
+	case Keyword:
+		isPreviousTokenOperand = false;
+		*writeFile << "Keyword" << " " << maxLengthToken.tokenValue << endl;
+		break;
+	case VarType:
+		isPreviousTokenOperand = false;
+		*writeFile << "VarType" << " " << maxLengthToken.tokenValue << endl;
+		break;
+	case BooleanStr:
+		isPreviousTokenOperand = false;
+		*writeFile << "Boolean" << " " << maxLengthToken.tokenValue << endl;
+		break;
+	case Identifier:
+		isPreviousTokenOperand = true;
+		*writeFile << "Identifier" << " " << maxLengthToken.tokenValue << endl;
+		break;
+	case BitwiseOp:
+		isPreviousTokenOperand = false;
+		*writeFile << "BitwiseOp" << " " << maxLengthToken.tokenValue << endl;
+		break;
+	case ComparisonOp:
+		isPreviousTokenOperand = false;
+		*writeFile << "ComparisonOp" << " " << maxLengthToken.tokenValue << endl;
+		break;
+	case AssignmentOp:
+		isPreviousTokenOperand = false;
+		*writeFile << "Assignment" << endl;
+		break;
+	case FloatingPoint:
+		isPreviousTokenOperand = true;
+		*writeFile << "FloatingPoint" << " " << maxLengthToken.tokenValue << endl;
+		break;
+	case LiteralStr:
+		isPreviousTokenOperand = false;
+		*writeFile << "literalStr" << " " << maxLengthToken.tokenValue << endl;
+		break;
+	case SignedInt:
+		isPreviousTokenOperand = true;
+		*writeFile << "SignedInt" << " " << maxLengthToken.tokenValue << endl;
+		break;
+	case ArithmeticOp:
+		isPreviousTokenOperand = false;
+		*writeFile << "ArithmeticOp" << " " << maxLengthToken.tokenValue << endl;
+		break;
+	case Comma:
+		isPreviousTokenOperand = false;
+		*writeFile << "Comma" << endl;
+		break;
+	case Brace:
+		isPreviousTokenOperand = false;
+		*writeFile << "Brace" << " " << maxLengthToken.tokenValue << endl;
+		break;
+	case Paren:
+		if (lexeme[0] == ')')
+			isPreviousTokenOperand = true;
+		else
+			isPreviousTokenOperand = false;
+		*writeFile << "Paren" << " " << maxLengthToken.tokenValue << endl;
+		break;
+	case Semicolon:
+		isPreviousTokenOperand = false;
+		*writeFile << "Semicolon" << endl;
+		break;
+	case Whitespace:
+		countNewLine();
+	}
+}
 template <class T1, class T2> // T1 char CharClass, T2 vector<vector<State>>, vector<Element>
-bool DfaAccepts(const T1 inputList, const T2 table, const vector<DfaState> finalState, TokenName tokenName) {
+void DfaAccepts(const T1 inputList, const T2 table, const vector<DfaState> finalState, TokenName tokenName) {
 	int i = 0;
 
-	DfaState previousState;
 	DfaState currentState = START_STATE;
 	char currentChar;
 	int alphabet;
@@ -180,17 +170,16 @@ bool DfaAccepts(const T1 inputList, const T2 table, const vector<DfaState> final
 
 		lexeme[i++] = currentChar;
 
-		previousState = currentState;
 		currentState = changeState(currentState, alphabet, table); // table_Identifier[currentState][alphabet]; // state transition
 
-		if (inFinal(finalState, previousState) && meetCondition(tokenName, currentChar) && maxLengthToken < maxLength) {
+		if (inFinal(finalState, currentState) && meetCondition(tokenName, currentChar) && maxLengthToken.maxLength < i) {
 			maxLengthToken.maxLength = i;
 			maxLengthToken.tokenName = tokenName;
+			lexeme[i] = '\0';
 			maxLengthToken.tokenValue = lexeme;
 		}
 	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
 
-	lexeme[i - 1] = '\0';		// EOS
 	if (!currentChar)	i--;	// EOS
 
 	readFile.clear();
@@ -207,11 +196,13 @@ bool meetCondition(TokenName tokenName, char currentChar) {
 			return true;
 		else
 			return false;
+		break;
 	case Keyword: case VarType: case BooleanStr:
 		if (inputList_Identifier.size() == charToIndex(inputList_Identifier, currentChar))
-			return true;
-		else
 			return false;
+		else
+			return true;
+		break;
 	default:
 		return true;
 	}
@@ -317,10 +308,10 @@ DfaState changeState(const DfaState currentState, int inputIndex, const vector<v
 	return dfaTable[currentState][inputIndex];
 }
 
-void countNewLine(int *currentLine) {
+void countNewLine() {
 	int i;
-	for (i = 0; lexeme[i] != '\0'; i++) {
+	for (i = 0; maxLengthToken.tokenValue[i] != '\0'; i++) {
 		if(lexeme[i] == '\n')
-			*currentLine = *currentLine + 1;
+			currentLine++;
 	}
 }
