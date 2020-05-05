@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -12,6 +13,12 @@ typedef struct {
 	int line;
 	char wrongInput;
 } ErrorData;
+
+typedef struct {
+	int maxLength = 0;
+	TokenName tokenName;
+	string tokenValue;
+} MaxLengthToken;
 
 typedef enum {
 	START_STATE = 0,
@@ -29,6 +36,13 @@ typedef enum {
 	L_BRACE = '{',		R_BRACE = '}',			L_PAREN = '(',		R_PAREN = ')',		DOT = '.',
 	AND = '&',			OR = '|',				TAB = '\t',			SPACE = ' ',		NEWLINE = '\n'
 } CharClass;
+
+typedef enum {
+	Keyword = 0,
+	VarType,		BooleanStr,		Identifier,		BitwiseOp,		ComparisonOp,
+	AssignmentOp,	FloatingPoint,	LiteralStr,		SignedInt,		ArithmeticOp,
+	Comma,			Brace,			Paren,			Semicolon,		Whitespace
+}TokenName;
 
 vector<CharClass> nullVector = {};
 vector<CharClass> inputList_isPreviousTokenOperand = { R_PAREN, ZERO, NON_ZERO_DIGIT, LETTER };
