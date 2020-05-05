@@ -22,7 +22,8 @@ Semicolon
 Identifier a
 Assignment
 SignedInt 0
-SignedInt 0
+ArithmeticOp -
+SignedInt 6
 Semicolon
 SignedInt 12
 Semicolon
@@ -30,221 +31,15 @@ ArithmeticOp -
 SignedInt 0
 SignedInt 34
 Semicolon
-SignedInt -5
+Paren (
+FloatingPoint -5.4
+ArithmeticOp -
+SignedInt 3
+Paren )
+ArithmeticOp -
+SignedInt 5
 Semicolon
 SignedInt -1
 Identifier a
 Semicolon
-Brace {
-Identifier a
-ArithmeticOp -
-Paren (
-SignedInt -1
-Paren )
-Identifier a
-ArithmeticOp -
-Paren (
-ArithmeticOp -
-SignedInt 0
-SignedInt 1
-Paren )
-Identifier c
-ArithmeticOp -
-ArithmeticOp -
-Identifier b
-ArithmeticOp -
-SignedInt 1
-ArithmeticOp -
-SignedInt 2
-ArithmeticOp -
-SignedInt 3
-ArithmeticOp -
-SignedInt 0
-SignedInt 0
-Semicolon
-Identifier e
-Assignment
-Keyword while
-ArithmeticOp -
-Identifier a
-Semicolon
-Brace }
-Identifier a0
-SignedInt 5
-ArithmeticOp -
-FloatingPoint 0.5
-Semicolon
-FloatingPoint -0.0
-Semicolon
-ArithmeticOp +
-FloatingPoint 0.511
-Semicolon
-Identifier a
-Assignment
-SignedInt 0
-Semicolon
-Identifier b
-Assignment
-SignedInt 5
-Semicolon
-FloatingPoint 123.456
-SignedInt 0
-FloatingPoint 0.1
-Semicolon
-FloatingPoint 55.0
-SignedInt 0
-Identifier X
-FloatingPoint 55.005
-SignedInt 5
-Identifier X
-FloatingPoint 55.05
-SignedInt 0
-Identifier O
-Semicolon
-SignedInt 123
-Identifier abc
-Assignment
-Identifier trues
-Semicolon
-Identifier falses
-Semicolon
-literalStr ""
-Boolean true
-Assignment
-literalStr "true"
-Semicolon
-Boolean false
-Assignment
-Boolean false
-literalStr "a     b     c"
-Identifier i
-Comma
-Identifier k
-Comma
-Identifier abc
-Comma
-Identifier ab_123
-Comma
-Identifier func1
-Comma
-Identifier func_
-Comma
-Identifier _func_bar_
-Semicolon
-Keyword while
-Paren (
-Identifier int1a
-Paren )
-Semicolon
-Identifier whie
-Semicolon
-Identifier elseif
-Keyword else
-Keyword if
-Semicolon
-Keyword for
-Keyword for
-Identifier forfor
-Semicolon
-Identifier returna
-Semicolon
-ArithmeticOp +
-ArithmeticOp -
-ArithmeticOp *
-ArithmeticOp /
-VarType int
-ArithmeticOp +
-SignedInt 1
-ArithmeticOp -
-Paren (
-ArithmeticOp -
-Identifier a
-Paren )
-ArithmeticOp -
-Paren (
-SignedInt -3
-Paren )
-ArithmeticOp +
-ArithmeticOp +
-SignedInt 3
-Identifier inta
-ComparisonOp ==
-Identifier b
-ComparisonOp !=
-ComparisonOp <=
-ComparisonOp >=
-Assignment
-Semicolon
-Keyword while
-Paren (
-SignedInt 1
-ComparisonOp <
-SignedInt 2
-Paren )
-Keyword for
-Paren (
-Identifier i
-Assignment
-SignedInt 0
-Semicolon
-Identifier i
-ComparisonOp >
-SignedInt -3
-Semicolon
-Identifier i
-ArithmeticOp +
-Paren )
-Identifier a
-ComparisonOp <
-ComparisonOp >
-Identifier b
-Comma
-ComparisonOp <
-Comma
-ComparisonOp >
-Comma
-ComparisonOp ==
-Comma
-ComparisonOp !=
-Comma
-ComparisonOp <=
-Comma
-ComparisonOp >=
-SignedInt 1
-Identifier a
-ComparisonOp >
-SignedInt 23
-Identifier a_45c
-SignedInt 1
-BitwiseOp <<
-SignedInt 3
-Comma
-SignedInt 2
-BitwiseOp <<
-ComparisonOp <
-SignedInt 4
-Comma
-SignedInt 4
-BitwiseOp >>
-SignedInt 3
-Comma
-Identifier a
-BitwiseOp |
-Identifier a
-Comma
-Identifier b
-BitwiseOp &
-Identifier b
-Comma
-Identifier c
-BitwiseOp &
-BitwiseOp &
-Identifier c
-Comma
-BitwiseOp <<
-BitwiseOp &
-Identifier a
-Identifier t
-Comma
-Identifier n
 Brace }

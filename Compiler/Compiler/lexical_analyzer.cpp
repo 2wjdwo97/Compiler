@@ -5,7 +5,6 @@
 ifstream readFile("test.c");
 
 int currentLine = 1;
-int filePosition;
 char lexeme[100];
 bool endOfStream = false;
 bool isPreviousTokenOperand = false;
@@ -21,8 +20,6 @@ void DfaAccepts(const T1, const T2, const vector<DfaState>, TokenName);
 
 void WriteToken(ofstream *writeFile);
 bool meetCondition(TokenName, char);
-//bool meetCondition(const vector<CharClass>, char);
-//bool meetCondition(bool, char);
 
 bool inFinal(const vector<DfaState> final, DfaState previousState);
 
@@ -38,8 +35,6 @@ DfaState changeState(const DfaState currentState, int inputIndex, const vector<v
 //---------------------------------------------------------
 
 int main() {
-	bool ErrorFound;
-
 	if (!readFile.is_open())
 	{
 		printf("Error: Cannot open file 'code.c'\n");
@@ -64,7 +59,7 @@ int main() {
 			DfaAccepts(inputList_Paren, table_Paren, finalState_Paren, Paren);
 			DfaAccepts(inputList_Semicolon, table_Semicolon, finalState_Semicolon, Semicolon);
 			DfaAccepts(inputList_Whitespace, table_Whitespace, finalState_Whitespace, Whitespace);
-			
+
 			if (maxLengthToken.maxLength == 0) {
 				ErrorData newError;
 				newError.line = currentLine;
@@ -81,7 +76,7 @@ int main() {
 		} while (!endOfStream);
 
 		for (unsigned int i = 0; i < errorData.size(); i++)
-			printf("\nErrorLine: %d, WrongInput: %c", errorData[i].line, errorData[i].wrongInput);
+			printf("Error Line: %d, Wrong Input: %c\n", errorData[i].line, errorData[i].wrongInput);
 
 		writeFile.close();
 		readFile.close();
@@ -180,7 +175,7 @@ void DfaAccepts(const T1 inputList, const T2 table, const vector<DfaState> final
 		}
 	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
 
-	if (!currentChar)	i--;	// EOS
+	if (!currentChar)	i--;	// EOF
 
 	readFile.clear();
 	if (currentChar == '\n')
@@ -196,12 +191,6 @@ bool meetCondition(TokenName tokenName, char currentChar) {
 			return true;
 		else
 			return false;
-		break;
-	case Keyword: case VarType: case BooleanStr:
-		if (inputList_Identifier.size() == charToIndex(inputList_Identifier, currentChar))
-			return false;
-		else
-			return true;
 		break;
 	default:
 		return true;

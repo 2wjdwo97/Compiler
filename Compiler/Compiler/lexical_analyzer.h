@@ -45,9 +45,6 @@ typedef struct {
 	string tokenValue;
 } MaxLengthToken;
 
-vector<CharClass> nullVector = {};
-vector<CharClass> inputList_isPreviousTokenOperand = { R_PAREN, ZERO, NON_ZERO_DIGIT, LETTER };
-
 vector<CharClass> inputList_SignedInt = { ZERO, MINUS, NON_ZERO_DIGIT };
 vector<CharClass> inputList_LiteralStr = { QUOTATION, ZERO, NON_ZERO_DIGIT, LETTER, SPACE };
 vector<CharClass> inputList_FloatingPoint = { MINUS, ZERO, NON_ZERO_DIGIT, DOT };
@@ -194,7 +191,7 @@ const vector<vector<DfaState>> table_Whitespace = {
 
 //--------------------------- Transition Table (using SPARSE MATRIX) ---------------------------
 typedef struct {
-	int row;
+	DfaState row;
 	int col;
 	DfaState value;
 } DfaElement;
