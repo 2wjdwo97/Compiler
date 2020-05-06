@@ -9,6 +9,7 @@
 
 using namespace std;
 
+//States
 typedef enum {
 	START_STATE = 0,
 	STATE_1, STATE_2, STATE_3, STATE_4, STATE_5,
@@ -18,6 +19,7 @@ typedef enum {
 	EMPTY
 } DfaState;
 
+//Input characters
 typedef enum {
 	ZERO = '0',			NON_ZERO_DIGIT = '1',	LETTER = 'a',		UNDERLINE = '_',	QUOTATION = '"',
 	MINUS = '-',		PLUS = '+',				MULTIPLE = '*',		DIVIDE = '/',		EQUAL = '=',
@@ -26,6 +28,7 @@ typedef enum {
 	AND = '&',			OR = '|',				TAB = '\t',			SPACE = ' ',		NEWLINE = '\n'
 } CharClass;
 
+//Token name
 typedef enum {
 	Null = 0,		Keyword,
 	VarType,		BooleanStr,		Identifier,		BitwiseOp,		ComparisonOp,
@@ -33,18 +36,20 @@ typedef enum {
 	Comma,			Brace,			Paren,			Semicolon,		Whitespace
 } TokenName;
 
-
+//Error Info.
 typedef struct {
 	int line;
 	char wrongInput;
 } ErrorData;
 
+//Lexeme stored as maximum length
 typedef struct {
 	int maxLength = 0;
 	TokenName tokenName;
 	string tokenValue;
 } MaxLengthToken;
 
+//Input lists for each DFA
 vector<CharClass> inputList_SignedInt = { ZERO, MINUS, NON_ZERO_DIGIT };
 vector<CharClass> inputList_LiteralStr = { QUOTATION, ZERO, NON_ZERO_DIGIT, LETTER, SPACE };
 vector<CharClass> inputList_FloatingPoint = { MINUS, ZERO, NON_ZERO_DIGIT, DOT };
@@ -59,7 +64,7 @@ vector<CharClass> inputList_Paren = { L_PAREN, R_PAREN };
 vector<CharClass> inputList_Comma = { COMMA };
 vector<CharClass> inputList_Whitespace = { TAB, SPACE, NEWLINE };
 
-//--------------------------------- Transition Table (using 2D ARRAY) ---------------------------------
+//--------------------------------- Transition Table (using 2D Vector) ---------------------------------
 
 const vector<DfaState> finalState_SignedInt = { STATE_1, STATE_3, STATE_4, STATE_5 };
 const vector<vector<DfaState>> table_SignedInt = {
@@ -194,7 +199,7 @@ typedef struct {
 	DfaState row;
 	int col;
 	DfaState value;
-} DfaElement;
+} DfaElement;		//element of sparse matrix
 
 vector<char> inputList_VarType = { 'a', 'b', 'c', 'f', 'h', 'i', 'l', 'n', 'o', 'r', 't' };
 vector<char> inputList_BooleanStr = { 'a', 'e', 'f', 'l', 'r', 's', 't', 'u' };
