@@ -39,7 +39,6 @@ Paren )
 ArithmeticOp -
 SignedInt 5
 Semicolon
-SignedInt -1
-Identifier a
-Semicolon
-Brace }
+FloatingPoint 55.0
+SignedInt 0
+SignedInt 0

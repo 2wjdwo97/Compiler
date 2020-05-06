@@ -5,5 +5,4 @@ int chars(bool ischar) {
    float int;
    floatint;
    \\
-   a = 0-6;  12;  -034;   (-5.4-3)-5; -1a;
-}
+   a = 0-6;  12;  -034;   (-5.4-3)-5; 55.000

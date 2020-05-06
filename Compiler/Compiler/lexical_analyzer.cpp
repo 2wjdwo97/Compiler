@@ -6,7 +6,6 @@ ifstream readFile("test.c");
 
 int currentLine = 1;
 char lexeme[100];
-bool endOfStream = false;
 bool isPreviousTokenOperand = false;
 
 MaxLengthToken maxLengthToken;
@@ -59,21 +58,23 @@ int main() {
 			DfaAccepts(inputList_Paren, table_Paren, finalState_Paren, Paren);
 			DfaAccepts(inputList_Semicolon, table_Semicolon, finalState_Semicolon, Semicolon);
 			DfaAccepts(inputList_Whitespace, table_Whitespace, finalState_Whitespace, Whitespace);
-
-			if (maxLengthToken.maxLength == 0) {
-				ErrorData newError;
-				newError.line = currentLine;
-				newError.wrongInput = readFile.get();
-				errorData.push_back(newError);
-			}
-			else {
-				WriteToken(&writeFile);
-				readFile.seekg(maxLengthToken.maxLength, ios_base::cur);
+			
+			if (lexeme[0] != '\0') { //EOF는 file에 write하지도 error로 출력하지도 않는다.
+				if (maxLengthToken.maxLength == 0) {
+					ErrorData newError;
+					newError.line = currentLine;
+					newError.wrongInput = readFile.get();
+					errorData.push_back(newError);
+				}
+				else {
+					WriteToken(&writeFile);
+					readFile.seekg(maxLengthToken.maxLength, ios_base::cur);
+				}
 			}
 			maxLengthToken.maxLength = 0;
 			maxLengthToken.tokenName = Null;
 			
-		} while (!endOfStream);
+		} while (lexeme[0] != '\0');
 
 		for (unsigned int i = 0; i < errorData.size(); i++)
 			printf("Error Line: %d, Wrong Input: %c\n", errorData[i].line, errorData[i].wrongInput);
@@ -224,8 +225,6 @@ char getNextChar() { // stream에서 next character 가져오는 함수
 
 	if ((nextChar = readFile.get()) != EOF)
 		return nextChar;
-	else
-		endOfStream = true;
 	return NULL;
 }
 
