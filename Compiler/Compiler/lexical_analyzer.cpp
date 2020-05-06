@@ -1,11 +1,10 @@
 #include "lexical_analyzer.h"
 
 //----------------------- 전역변수 -----------------------
-//FILE* in_fp;
-ifstream readFile("test.c");
+ifstream readFile;
 
 int currentLine = 1;
-char lexeme[100];
+vector<char> lexeme;
 bool isPreviousTokenOperand = false;
 
 MaxLengthToken maxLengthToken;
@@ -13,17 +12,16 @@ vector<ErrorData> errorData;
 //---------------------------------------------------------
 
 //----------------------- 함수 선언 -----------------------
-void countNewLine();
+void WriteToken(ofstream* writeFile);
+
 template <class T1, class T2>
 void DfaAccepts(const T1, const T2, const vector<DfaState>, TokenName);
 
-void WriteToken(ofstream *writeFile);
 bool meetCondition(TokenName, char);
 
 bool inFinal(const vector<DfaState> final, DfaState previousState);
 
 char getNextChar();
-
 int charToIndex(const vector<CharClass>, char);
 int charToIndex(const vector<char>, char);
 
@@ -31,17 +29,31 @@ int binarySearch(const vector<DfaElement> dfaTable, const DfaState state);
 DfaState changeState(const DfaState currentState, int inputIndex, const vector<DfaElement> dfaTable);
 DfaState changeState(const DfaState currentState, int inputIndex, const vector<vector<DfaState>> dfaTable);
 
+void countNewLine();
 //---------------------------------------------------------
 
-int main() {
+int main(int argc, char* argv[]) {
+	if (argc != 2) {
+		cout << "The execution command of the lexical analyzer: lexical_analyzer <input_file_name> \n";
+		exit(0);
+	}
+
+	readFile.open(argv[1]);
+
 	if (!readFile.is_open())
 	{
-		printf("Error: Cannot open file 'code.c'\n");
+		cout << "Error: Cannot open file : " << argv[1];
 		exit(0);
-	}		
+	}
 	else {
-		ofstream writeFile("test.txt");
+		string fileName;
+		for (int i = 0; argv[1][i] != '.'; i++)
+			fileName.push_back(argv[1][i]);
+
+		ofstream writeFile;
+		writeFile.open(fileName + ".out");
 		do {
+			// DfaAccepts 함수를 각 토큰의 Dfa에 대해서 차례로 호출
 			DfaAccepts(inputList_Keyword, table_Keyword, finalState_Keyword, Keyword);
 			DfaAccepts(inputList_VarType, table_VarType, finalState_VarType, VarType);
 			DfaAccepts(inputList_BooleanStr, table_BooleanStr, finalState_BooleanStr, BooleanStr);
@@ -59,23 +71,25 @@ int main() {
 			DfaAccepts(inputList_Semicolon, table_Semicolon, finalState_Semicolon, Semicolon);
 			DfaAccepts(inputList_Whitespace, table_Whitespace, finalState_Whitespace, Whitespace);
 			
-			if (lexeme[0] != '\0') { //EOF는 file에 write하지도 error로 출력하지도 않는다.
-				if (maxLengthToken.maxLength == 0) {
-					ErrorData newError;
-					newError.line = currentLine;
-					newError.wrongInput = readFile.get();
-					errorData.push_back(newError);
-				}
-				else {
-					WriteToken(&writeFile);
-					readFile.seekg(maxLengthToken.maxLength, ios_base::cur);
-				}
+			if (maxLengthToken.maxLength == 0) { // accept된 dfa가 하나도 없다면 error로 판단
+				ErrorData newError;
+				newError.line = currentLine;
+				newError.wrongInput = readFile.get();
+				errorData.push_back(newError);
 			}
+			else { // accept된 dfa가 있다면 그 token의 정보를 파일에 저장
+				WriteToken(&writeFile);
+				readFile.seekg(maxLengthToken.maxLength, ios_base::cur);
+			}
+
+			// maxLengthToken의 변수들을 초기화
 			maxLengthToken.maxLength = 0;
 			maxLengthToken.tokenName = Null;
-			
-		} while (lexeme[0] != '\0');
+			maxLengthToken.tokenValue.clear();
+		} while (!readFile.eof()); // EOF가 아닐 때 반복
 
+		// Error 출력
+		errorData.pop_back(); //마지막 error는 EOF이므로 제거
 		for (unsigned int i = 0; i < errorData.size(); i++)
 			printf("Error Line: %d, Wrong Input: %c\n", errorData[i].line, errorData[i].wrongInput);
 
@@ -83,7 +97,9 @@ int main() {
 		readFile.close();
 	}
 }
+
 void WriteToken(ofstream *writeFile) {
+	// file write할 때 tokenName에 따라 각 동작을 수행
 	switch (maxLengthToken.tokenName) {
 	case Keyword:
 		isPreviousTokenOperand = false;
@@ -138,7 +154,7 @@ void WriteToken(ofstream *writeFile) {
 		*writeFile << "Brace" << " " << maxLengthToken.tokenValue << endl;
 		break;
 	case Paren:
-		if (lexeme[0] == ')')
+		if (maxLengthToken.tokenValue == ")")
 			isPreviousTokenOperand = true;
 		else
 			isPreviousTokenOperand = false;
@@ -152,31 +168,35 @@ void WriteToken(ofstream *writeFile) {
 		countNewLine();
 	}
 }
-template <class T1, class T2> // T1 char CharClass, T2 vector<vector<State>>, vector<Element>
+
+template <class T1, class T2> // T1 char, CharClass, T2 vector<vector<State>>, vector<Element>
 void DfaAccepts(const T1 inputList, const T2 table, const vector<DfaState> finalState, TokenName tokenName) {
 	int i = 0;
 
 	DfaState currentState = START_STATE;
-	char currentChar;
-	int alphabet;
+	char currentChar;	// 현재 file에서 읽은 character를 저장
+	int alphabet;		// currentChar를 index로 쓸 수 있게 integer type으로 alphabet에 저장
 
 	while (currentState != EMPTY) {
 		currentChar = getNextChar();
 		alphabet = charToIndex(inputList, currentChar);
 
-		lexeme[i++] = currentChar;
+		lexeme.push_back(currentChar);
+		i++;
 
-		currentState = changeState(currentState, alphabet, table); // table_Identifier[currentState][alphabet]; // state transition
+		currentState = changeState(currentState, alphabet, table); // state transition
 
 		if (inFinal(finalState, currentState) && meetCondition(tokenName, currentChar) && maxLengthToken.maxLength < i) {
-			maxLengthToken.maxLength = i;
+			string lexemeToSting(lexeme.begin(), lexeme.end());
+			maxLengthToken.maxLength = lexeme.size();
 			maxLengthToken.tokenName = tokenName;
-			lexeme[i] = '\0';
-			maxLengthToken.tokenValue = lexeme;
+			maxLengthToken.tokenValue = lexemeToSting;
 		}
 	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
 
-	if (!currentChar)	i--;	// EOF
+	lexeme.clear();
+
+	if (currentChar == '\0')	i--;	// EOF일 때
 
 	readFile.clear();
 	if (currentChar == '\n')
@@ -197,20 +217,6 @@ bool meetCondition(TokenName tokenName, char currentChar) {
 		return true;
 	}
 }
-
-//bool meetCondition(const vector<CharClass> condition, char currentChar) {
-//	if (condition.size() == charToIndex(condition, currentChar))
-//		return true;
-//	else
-//		return false;
-//}
-////SignedInteger, FloatingPoint 검사 : 이전 토큰이 { R_PAREN, ZERO, NON_ZERO_DIGIT, LETTER } 인 경우
-//bool meetCondition(bool isPreviousTokenOperand, char currentChar) {
-//	if (!isPreviousTokenOperand || lexeme[0] != '-')
-//		return true;
-//	else
-//		return false;
-//}
 
 bool inFinal(const vector<DfaState> final, const DfaState previousState) {
 	for (unsigned int i = 0; i < final.size(); i++) {
@@ -299,7 +305,7 @@ DfaState changeState(const DfaState currentState, int inputIndex, const vector<v
 void countNewLine() {
 	int i;
 	for (i = 0; maxLengthToken.tokenValue[i] != '\0'; i++) {
-		if(lexeme[i] == '\n')
+		if(maxLengthToken.tokenValue[i] == '\n')
 			currentLine++;
 	}
 }

@@ -74,7 +74,7 @@ const vector<vector<DfaState>> table_SignedInt = {
 
 const vector<DfaState> finalState_LiteralStr = { STATE_2 };
 const vector<vector<DfaState>> table_LiteralStr = {
-	/*                     "         Zero      DIGIT      LETTER      SPACE      OTHER      // FINAL_STATE = 2
+	/*							"			Zero		DIGIT			LETTER			SPACE			OTHER      // FINAL_STATE = 2
 	/* START_STATE */	{      STATE_1  ,   EMPTY   ,   EMPTY		,   EMPTY		,   EMPTY		,   EMPTY   },
 	/* STATE_1 */		{      STATE_2  ,   STATE_1	,   STATE_1		,   STATE_1		,   STATE_1		,   EMPTY   },
 	/* STATE_2 */		{      EMPTY	,   EMPTY   ,   EMPTY		,   EMPTY		,   EMPTY		,   EMPTY   }
