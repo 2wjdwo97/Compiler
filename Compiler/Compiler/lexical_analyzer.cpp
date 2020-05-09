@@ -1,13 +1,16 @@
 #include "lexical_analyzer.h"
 
-//----------------------- 전역 변수 -----------------------
+//----------------------- 전역변수 -----------------------
 ifstream readFile;
+
+int readPosition = 0;
 int currentLine = 1;
-
 vector<char> lexeme;
-MaxLengthToken maxLengthToken;
-
 bool isPreviousTokenOperand = false;
+
+string code;
+
+MaxLengthToken maxLengthToken;
 vector<ErrorData> errorData;
 //---------------------------------------------------------
 
@@ -46,13 +49,17 @@ int main(int argc, char* argv[]) {
 		exit(0);
 	}
 	else {
+		code.assign((std::istreambuf_iterator<char>(readFile)),
+			(std::istreambuf_iterator<char>()));
+		code.push_back(EOF);
 		string fileName;
+		
 		for (int i = 0; argv[1][i] != '.'; i++)
 			fileName.push_back(argv[1][i]);
 
 		ofstream writeFile;
 		writeFile.open(fileName + ".out");
-		do {
+		while (code[readPosition] != EOF) { //EOF가 아닐 때 반복
 			// DfaAccepts 함수를 각 토큰의 Dfa에 대해서 차례로 호출
 			DfaAccepts(inputList_Keyword, table_Keyword, finalState_Keyword, Keyword);
 			DfaAccepts(inputList_VarType, table_VarType, finalState_VarType, VarType);
@@ -74,22 +81,22 @@ int main(int argc, char* argv[]) {
 			if (maxLengthToken.maxLength == 0) { // accept된 dfa가 하나도 없다면 error로 판단
 				ErrorData newError;
 				newError.line = currentLine;
-				newError.wrongInput = readFile.get();
+				newError.wrongInput = code[readPosition++];
 				errorData.push_back(newError);
 			}
 			else { // accept된 dfa가 있다면 그 token의 정보를 파일에 저장
 				WriteToken(&writeFile);
-				readFile.seekg(maxLengthToken.maxLength, ios_base::cur);
+				readPosition += maxLengthToken.maxLength;
 			}
 
 			// maxLengthToken의 변수들을 초기화
 			maxLengthToken.maxLength = 0;
 			maxLengthToken.tokenName = Null;
 			maxLengthToken.tokenValue.clear();
-		} while (!readFile.eof()); // EOF가 아닐 때 반복
+		}
 
 		// Error 출력
-		errorData.pop_back(); //마지막 error는 EOF이므로 제거
+
 		for (unsigned int i = 0; i < errorData.size(); i++)
 			printf("Error Line: %d, Wrong Input: %c\n", errorData[i].line, errorData[i].wrongInput);
 
@@ -169,7 +176,7 @@ void WriteToken(ofstream *writeFile) {
 	}
 }
 
-template <class T1, class T2> // T1 = char, CharClass // T2 = vector<vector<State>>, vector<Element>
+template <class T1, class T2> // T1 char, CharClass, T2 vector<vector<State>>, vector<Element>
 void DfaAccepts(const T1 inputList, const T2 table, const vector<DfaState> finalState, TokenName tokenName) {
 	int i = 0;
 
@@ -195,17 +202,11 @@ void DfaAccepts(const T1 inputList, const T2 table, const vector<DfaState> final
 	}  // dfa가 reject될 때 or 파일이 끝난 경우 루프 탈출
 
 	lexeme.clear();
-
-	if (currentChar == '\0')	i--;	// EOF일 때
-
-	readFile.clear();
-	if (currentChar == '\n')
-		readFile.seekg(-(i + 1), ios_base::cur);
-	else
-		readFile.seekg(-i, ios_base::cur); // file pointer move backward (next to previous token)
+	
+	readPosition -= i; // file pointer move backward (next to previous token)
 }
 
-bool meetCondition(TokenName tokenName, char currentChar) {		// '-'가 ArithmeticOP인지 검사하는 함수
+bool meetCondition(TokenName tokenName, char currentChar) {
 	switch (tokenName) {
 	case SignedInt: case FloatingPoint:
 		if (!isPreviousTokenOperand || lexeme[0] != '-')
@@ -218,7 +219,7 @@ bool meetCondition(TokenName tokenName, char currentChar) {		// '-'가 Arithmetic
 	}
 }
 
-bool inFinal(const vector<DfaState> final, const DfaState previousState) {	//이전 State가 Final State 확인하는 함수
+bool inFinal(const vector<DfaState> final, const DfaState previousState) {
 	for (unsigned int i = 0; i < final.size(); i++) {
 		if (final[i] == previousState)
 			return true;
@@ -227,14 +228,9 @@ bool inFinal(const vector<DfaState> final, const DfaState previousState) {	//이�
 }
 
 char getNextChar() { // stream에서 next character 가져오는 함수
-	char nextChar;
-
-	if ((nextChar = readFile.get()) != EOF)
-		return nextChar;
-	return NULL;
+	return code[readPosition++];
 }
 
-// 현재 파일에서 받아온 char를 Transition Table에서 쓸 수 있도록 index로 변환하는 함수
 int charToIndex(const vector<CharClass> inputList, char inputChar) {
 
 	for (unsigned int i = 0; i < inputList.size(); i++) {
@@ -250,6 +246,7 @@ int charToIndex(const vector<CharClass> inputList, char inputChar) {
 
 	return inputList.size();
 }
+
 int charToIndex(const vector<char> inputList, char inputChar) {
 	unsigned int i = 0;
 	for (; i < inputList.size() && inputList[i] != inputChar; i++);
@@ -257,8 +254,8 @@ int charToIndex(const vector<char> inputList, char inputChar) {
 	return i;
 }
 
-//sparse matrix에서 currentState가 몇 번째 행에 저장되어 있는지 가져오는 함수
-int binarySearch(const vector<DfaElement> dfaTable, const DfaState state) {	
+int binarySearch(const vector<DfaElement> dfaTable, const DfaState state)
+{
 	int low = 0, mid, high = dfaTable.size() - 1;
 	while (low <= high)
 	{
@@ -273,7 +270,8 @@ int binarySearch(const vector<DfaElement> dfaTable, const DfaState state) {
 	return -1;
 }
 
-DfaState changeState(const DfaState currentState, int inputIndex, const vector<DfaElement> dfaTable) {	//sparse matrix
+DfaState changeState(const DfaState currentState, int inputIndex, const vector<DfaElement> dfaTable)
+{
 	int index = binarySearch(dfaTable, currentState);
 
 	if (index == -1)
@@ -296,7 +294,8 @@ DfaState changeState(const DfaState currentState, int inputIndex, const vector<D
 	}
 }
 
-DfaState changeState(const DfaState currentState, int inputIndex, const vector<vector<DfaState>> dfaTable) {
+DfaState changeState(const DfaState currentState, int inputIndex, const vector<vector<DfaState>> dfaTable)
+{
 	return dfaTable[currentState][inputIndex];
 }
 
