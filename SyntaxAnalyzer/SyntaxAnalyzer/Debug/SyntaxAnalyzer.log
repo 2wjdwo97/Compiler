@@ -1,0 +1,8 @@
+﻿  syntax_analyzer.cpp
+C:\Users\kio10\Desktop\compiler\Compiler2\SyntaxAnalyzer\SyntaxAnalyzer\syntax_analyzer.cpp(116,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\kio10\Desktop\compiler\Compiler2\SyntaxAnalyzer\SyntaxAnalyzer\syntax_analyzer.cpp(106): message : 컴파일되는 함수 템플릿 인스턴스화 'int toIndex<SYMBOL>(T,std::vector<SYMBOL,std::allocator<SYMBOL>>)'에 대한 참조를 확인하세요.
+          with
+          [
+              T=SYMBOL
+          ]
+  SyntaxAnalyzer.vcxproj -> C:\Users\kio10\Desktop\compiler\Compiler2\SyntaxAnalyzer\Debug\SyntaxAnalyzer.exe
