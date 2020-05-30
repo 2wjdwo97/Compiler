@@ -138,10 +138,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="syntax_analyzer.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SententialForm.cpp" />
+    <ClCompile Include="SLRparser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="syntax_analyzer.h" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="SententialForm.h" />
+    <ClInclude Include="SLRparser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
