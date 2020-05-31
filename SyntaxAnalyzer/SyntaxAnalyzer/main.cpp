@@ -22,12 +22,12 @@ int main(int argc, char* argv[]) {
 			while (!readFile.eof()) {
 				getline(readFile, line);
 				vector<string> tokens = split(line, ' ');
-				sentence.codeToSentence(tokens);
+				sentence.tokensToSentence(tokens);
 			}
 			sentence.pushBack(SYMBOL::ENDMARKER);
 
 			/* SLR parsing */
-			parser.parsing(sentence.getSentence());
+			parser.SLRparsing(sentence);
 
 			/* print result */
 			if (!parser.getIsFinish())

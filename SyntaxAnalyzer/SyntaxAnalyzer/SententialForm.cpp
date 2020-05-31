@@ -5,7 +5,8 @@ SententialForm::SententialForm() {
 SententialForm::~SententialForm() {
 }
 
-void SententialForm::codeToSentence(vector<string> tokens) {
+/* change the output of lexical_analyzer into the sequence of terminals(sentence) */
+void SententialForm::tokensToSentence(const vector<string> tokens) {
 	try {
 		if (tokens.size() != 2)
 			throw Exception("uncorrect symbol table", __FILE__, __LINE__);
@@ -90,10 +91,18 @@ void SententialForm::codeToSentence(vector<string> tokens) {
 		cout << "sentence error" << endl;
 }*/
 
-void SententialForm::pushBack(SYMBOL symbol) {
+void SententialForm::pushBack(const SYMBOL symbol) {
 	sentential.push_back(symbol);
 }
 
-vector<SYMBOL> SententialForm::getSentence() {
+void SententialForm::erase(int start, int end) {
+	sentential.erase(sentential.begin() + start, sentential.begin() + end);
+}
+
+void SententialForm::insert(int index, SYMBOL value) {
+	sentential.insert(sentential.begin() + index, value);
+}
+
+vector<SYMBOL>& SententialForm::getSentence() {
 	return sentential;
 }

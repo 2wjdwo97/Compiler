@@ -9,37 +9,37 @@ class Exception;
 class SLRparser
 {
 private:
-	stack<int> st;
-	SYMBOL nextInputSymbol;
-	int splitter;
-	vector<SYMBOL> sentential;
-
-	bool isFinish;
+	stack<int> st;					// stack
+	SYMBOL nextInputSymbol;			// next input symbol
+	int splitter;					// splitter
+	bool isFinish;					// check if parsing is finished
 
 public:
 	SLRparser();
 	~SLRparser();
-	void parsing(vector<SYMBOL> );
+
 	template <class T>
-	int toIndex(T , vector<T> );
-	void changeState(int , int );
+	int toIndex(const T, const vector<T>);
+	void SLRparsing(SententialForm&);
+	void changeState(SententialForm&, const int, const int);
+
 	bool getIsFinish();
-	bool checkAccept();
+	bool checkAccept(SententialForm&);
 };
 
 
-// shift-reduce 
+/* shift-reduce */
 enum class ACTION {
 	SHIFT = 0, REDUCE, EMPTY
 };
 
-// a state of SLR parsing table
+/* a state of SLR parsing table */
 typedef struct {
 	ACTION action;
 	int actionNum = -1;
 } State;
 
-// SLR parsing table (ACION part)
+/* SLR parsing table (ACION part) */
 const vector<SYMBOL> inputSymbolList_Action = { SYMBOL::MULTDIV, SYMBOL::LPAREN, SYMBOL::RPAREN, SYMBOL::ID, SYMBOL::ENDMARKER };
 const vector<vector<State>> SLRtable_Action = {
 	{{ACTION::EMPTY, 0}, {ACTION::SHIFT, 4}, {ACTION::EMPTY, 0}, {ACTION::SHIFT, 5}, {ACTION::EMPTY, 0}},
@@ -52,7 +52,7 @@ const vector<vector<State>> SLRtable_Action = {
 	{{ACTION::EMPTY, 0}, {ACTION::EMPTY, 0}, {ACTION::REDUCE, 2}, {ACTION::EMPTY, 0}, {ACTION::REDUCE, 2}},
 	{{ACTION::REDUCE, 4}, {ACTION::EMPTY, 0}, {ACTION::REDUCE, 4}, {ACTION::EMPTY, 0}, {ACTION::REDUCE, 4}}
 };
-// SLR parsing table (GOTO part)
+/* SLR parsing table (GOTO part) */
 const vector<SYMBOL> inputSymbolList_Goto = { SYMBOL::E, SYMBOL::T, SYMBOL::START };
 const vector<vector<int>> SLRtable_Goto = {
 	{2, 3, 0},
@@ -67,12 +67,12 @@ const vector<vector<int>> SLRtable_Goto = {
 };
 
 
+/* context free grammar G */
 typedef struct {
 	SYMBOL symbol;
 	int length;
 } Production;
 
-// context free grammar G
 const vector<Production> CFG = {
 	{SYMBOL::START, 1},
 	{SYMBOL::E, 3},

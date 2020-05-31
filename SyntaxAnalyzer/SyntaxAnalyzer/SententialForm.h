@@ -17,7 +17,10 @@ enum class SYMBOL {
 	CODE, VDECL, FDECL, ARG, MOREARGS,
 	BLOCK, STMT, ASSIGN_NON, RHS, EXPR,
 	TERM, FACTOR, COND, RETURN_NON, ELSE_NON,
-	START, E, T//temp
+	START,
+	
+	//temp
+	E, T
 };
 
 class Exception;
@@ -25,16 +28,21 @@ class Exception;
 class SententialForm
 {
 private:
-	vector<SYMBOL> sentential;
+	vector<SYMBOL> sentential;	// sentential form used in the SLR parsing
 
 public:
 	SententialForm();
 	~SententialForm();
-	void codeToSentence(vector<string> );
-	void pushBack(SYMBOL);
-	vector<SYMBOL> getSentence();
+
+	void tokensToSentence(const vector<string> );
+	void pushBack(const SYMBOL);
+	void erase(int, int);
+	void insert(int, SYMBOL);
+
+	vector<SYMBOL>& getSentence();
 };
 
+/* Translation Table (symbol_table to sentence) */
 typedef struct {
 	string name;
 	SYMBOL value;
