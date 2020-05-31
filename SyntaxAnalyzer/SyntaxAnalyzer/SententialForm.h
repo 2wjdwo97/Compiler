@@ -1,4 +1,5 @@
 #pragma once
+#include "Exception.h"
 #include <vector>
 #include <iostream>
 
@@ -19,6 +20,8 @@ enum class SYMBOL {
 	START, E, T//temp
 };
 
+class Exception;
+
 class SententialForm
 {
 private:
@@ -30,4 +33,25 @@ public:
 	void codeToSentence(vector<string> );
 	void pushBack(SYMBOL);
 	vector<SYMBOL> getSentence();
+};
+
+typedef struct {
+	string name;
+	SYMBOL value;
+} SymbolInfo;
+
+const vector<vector<SymbolInfo>> table = {
+	{{"VTYPE", SYMBOL::VTYPE}},
+	{{"NUM", SYMBOL::NUM}},
+	{{"FLOAT", SYMBOL::FLOAT}},
+	{{"LITERAL", SYMBOL::LITERAL}},
+	{{"ID", SYMBOL::ID}},
+	{{"KEYWORD", SYMBOL::EPSILON}, {"if", SYMBOL::IF}, {"else", SYMBOL::ELSE}, {"whlie", SYMBOL::WHILE}, {"for", SYMBOL::FOR}, {"return", SYMBOL::RETURN}},
+	{{"ARITHM", SYMBOL::EPSILON}, {"+", SYMBOL::ADDSUB}, {"-", SYMBOL::ADDSUB}, {"*", SYMBOL::MULTDIV}, {"/", SYMBOL::MULTDIV}},
+	{{"ASSIGN", SYMBOL::ASSIGN}},
+	{{"COMP", SYMBOL::COMP}},
+	{{"SEMI", SYMBOL::SEMI}},
+	{{"COMMA", SYMBOL::COMMA}},
+	{{"PAREN", SYMBOL::EPSILON}, {"(", SYMBOL::LPAREN}, {")", SYMBOL::RPAREN}},
+	{{"BRACE", SYMBOL::EPSILON}, {"{", SYMBOL::LBRACE}, {"}", SYMBOL::RBRACE}}
 };

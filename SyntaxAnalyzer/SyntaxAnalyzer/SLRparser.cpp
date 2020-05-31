@@ -8,7 +8,7 @@ SLRparser::SLRparser() {
 	st.push(1);	
 	splitter = 0;
 	nextInputSymbol = SYMBOL::ENDMARKER;
-	isError = false;
+	isFinish = false;
 }
 SLRparser::~SLRparser() {
 }
@@ -17,20 +17,25 @@ void SLRparser::parsing(vector<SYMBOL> sententialForm) {
 	sentential = sententialForm;
 	nextInputSymbol = sentential[0];
 
-	while (!isError) {
+	while (!isFinish) {
 		changeState(st.top() - 1, toIndex(nextInputSymbol, inputSymbolList_Action));
 
-		if (isAccept())	break;
+		if (checkAccept())	break;
 	}
 }
 
 template <class T>
 int SLRparser::toIndex(T symbol, vector<T> inputList) {
-	for (int i = 0; i < inputList.size(); i++) {
-		if (inputList[i] == symbol)
-			return i;	// return index
+	try {
+		for (int i = 0; i < inputList.size(); i++) {
+			if (inputList[i] == symbol)
+				return i;	// return index
+		}
+		throw Exception("uncorrect input symbol", __FILE__, __LINE__);
 	}
-	return -1;			//error
+	catch (Exception e) {
+		e.printMessage();
+	}
 }
 
 void SLRparser::changeState(int currentState, int input) {
@@ -54,24 +59,24 @@ void SLRparser::changeState(int currentState, int input) {
 		splitter++;
 		/* for A -> ес, push GOTO (currentState, A) into the stack */
 		st.push(SLRtable_Goto[st.top() - 1][toIndex(CFG[SLRtable_Action[currentState][input].actionNum - 1].symbol, inputSymbolList_Goto)]);
-		if (st.top() == 0 && !isAccept())
-			isError = true;
+		if (st.top() == 0 && !checkAccept())
+			isFinish = true;
 		break;
 
 	/* Error */
 	case ACTION::EMPTY:
-		isError = true;
+		isFinish = true;
 		break;
 	}
 }
 
-bool SLRparser::isAccept() {
+bool SLRparser::checkAccept() {
 	if (sentential[0] == SYMBOL::START && sentential[1] == SYMBOL::ENDMARKER)
 		return true;
 	else
 		return false;
 }
 
-bool SLRparser::getError() {
-	return isError;
+bool SLRparser::getIsFinish() {
+	return isFinish;
 }

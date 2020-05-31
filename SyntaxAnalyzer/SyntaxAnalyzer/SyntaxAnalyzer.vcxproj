@@ -138,11 +138,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Exception.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SententialForm.cpp" />
     <ClCompile Include="SLRparser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Exception.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="SententialForm.h" />
     <ClInclude Include="SLRparser.h" />

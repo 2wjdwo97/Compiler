@@ -6,6 +6,38 @@ SententialForm::~SententialForm() {
 }
 
 void SententialForm::codeToSentence(vector<string> tokens) {
+	try {
+		if (tokens.size() != 2)
+			throw Exception("uncorrect symbol table", __FILE__, __LINE__);
+
+		unsigned int i;
+		for (i = 0; i < table.size(); i++) {
+			if (tokens[0].compare(table[i][0].name) == 0) {
+				/* Keyword, Arithmetic Op, Paren, Brace */
+				if (table[i][0].value == SYMBOL::EPSILON) {
+					for (unsigned int j = 1; j < table[i].size(); j++) {
+						if (table[i][j].name == tokens[1]) {
+							sentential.push_back(table[i][j].value);
+							break;
+						}
+					}
+				}
+				/* else */
+				else {
+					sentential.push_back(table[i][0].value);
+				}
+				break;
+			}
+		}
+
+		if (i == table.size())
+			throw Exception("uncorrect symbol table", __FILE__, __LINE__);
+	}
+	catch (Exception e) {
+		e.printMessage();
+	}
+}
+/*{
 	if (tokens[0].compare("VTYPE") == 0)
 		sentential.push_back(SYMBOL::VTYPE);
 	else if (tokens[0].compare("NUM") == 0)
@@ -56,7 +88,7 @@ void SententialForm::codeToSentence(vector<string> tokens) {
 	}
 	else
 		cout << "sentence error" << endl;
-}
+}*/
 
 void SententialForm::pushBack(SYMBOL symbol) {
 	sentential.push_back(symbol);

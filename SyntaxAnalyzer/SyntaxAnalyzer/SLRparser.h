@@ -1,8 +1,10 @@
 #pragma once
 #include "SententialForm.h"
+#include "Exception.h"
 #include <stack>
 
 class SententialForm;
+class Exception;
 
 class SLRparser
 {
@@ -12,7 +14,7 @@ private:
 	int splitter;
 	vector<SYMBOL> sentential;
 
-	bool isError;
+	bool isFinish;
 
 public:
 	SLRparser();
@@ -21,8 +23,8 @@ public:
 	template <class T>
 	int toIndex(T , vector<T> );
 	void changeState(int , int );
-	bool getError();
-	bool isAccept();
+	bool getIsFinish();
+	bool checkAccept();
 };
 
 
