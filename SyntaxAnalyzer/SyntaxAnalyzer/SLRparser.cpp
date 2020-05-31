@@ -14,7 +14,6 @@ SLRparser::~SLRparser() {
 }
 
 void SLRparser::SLRparsing(SententialForm& sententialForm) {
-	//sentential = sententialForm;
 	nextInputSymbol = sententialForm.getSentence()[0];
 
 	while (!isFinish) {
@@ -42,8 +41,8 @@ void SLRparser::changeState(SententialForm& sententialForm, const int currentSta
 	switch (SLRtable_Action[currentState][input].action) {
 	/* Make a decision : Shift */
 	case ACTION::SHIFT:	
-		st.push(SLRtable_Action[currentState][input].actionNum);	// push the next state into the stack
-		nextInputSymbol = sententialForm.getSentence()[++splitter];					// move the splitter to the right, change the next input sumbol
+		st.push(SLRtable_Action[currentState][input].actionNum);		// push the next state into the stack
+		nextInputSymbol = sententialForm.getSentence()[++splitter];		// move the splitter to the right, change the next input sumbol
 		break;
 
 	/* Make a decision : Reduce */
@@ -53,7 +52,7 @@ void SLRparser::changeState(SententialForm& sententialForm, const int currentSta
 		for (i = 0; i < CFG[SLRtable_Action[currentState][input].actionNum - 1].length; i++)
 			st.pop();
 
-		/* reduce by corresponding production */
+		/* do a reduction of the suffix (right end substring) of the left substring which matches the RHS of a production */
 		sententialForm.erase(splitter - i, splitter);
 		splitter -= i;
 		sententialForm.insert(splitter, CFG[SLRtable_Action[currentState][input].actionNum - 1].symbol);
