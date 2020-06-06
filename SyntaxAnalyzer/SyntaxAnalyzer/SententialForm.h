@@ -11,7 +11,7 @@ enum class SYMBOL {
 	IF, ELSE, WHILE, FOR, RETURN,
 	ADDSUB, MULTDIV, ASSIGN, COMP, SEMI,
 	COMMA, LPAREN, RPAREN, LBRACE, RBRACE,
-	EPSILON, ENDMARKER,
+	ENDMARKER,
 
 	// non-termianls
 	CODE, VDECL, FDECL, ARG, MOREARGS,
@@ -19,8 +19,8 @@ enum class SYMBOL {
 	TERM, FACTOR, COND, RETURN_NON, ELSE_NON,
 	START,
 	
-	//temp
-	E, T
+	// Wrong input
+	ERROR
 };
 
 class Exception;

@@ -52,13 +52,16 @@ int main(int argc, char* argv[]) {
 		code.assign((std::istreambuf_iterator<char>(readFile)),
 			(std::istreambuf_iterator<char>()));
 		code.push_back(EOF);
-		string fileName;
+
 		
+		string fileName;
+
 		for (int i = 0; argv[1][i] != '.'; i++)
-			fileName.push_back(argv[1][i]);
+	        fileName.push_back(argv[1][i]);
+		fileName = fileName + ".out";
 
 		ofstream writeFile;
-		writeFile.open(fileName + ".out");
+		writeFile.open(fileName);
 		while (code[readPosition] != EOF) { //EOF가 아닐 때 반복
 			// DfaAccepts 함수를 각 토큰의 Dfa에 대해서 차례로 호출
 			DfaAccepts(inputList_Keyword, table_Keyword, finalState_Keyword, Keyword);
@@ -84,7 +87,7 @@ int main(int argc, char* argv[]) {
 				newError.wrongInput = code[readPosition++];
 				errorData.push_back(newError);
 			}
-			else { // accept된 dfa가 있다면 그 token의 정보를 파일에 저장
+			else {// accept된 dfa가 있고 error가 없다면 그 token의 정보를 파일에 저장
 				WriteToken(&writeFile);
 				readPosition += maxLengthToken.maxLength;
 			}
@@ -96,12 +99,14 @@ int main(int argc, char* argv[]) {
 		}
 
 		// Error 출력
-
 		for (unsigned int i = 0; i < errorData.size(); i++)
 			printf("Error Line: %d, Wrong Input: %c\n", errorData[i].line, errorData[i].wrongInput);
 
 		writeFile.close();
 		readFile.close();
+
+		if (errorData.size() != 0)
+			remove(fileName.c_str());
 	}
 }
 

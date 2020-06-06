@@ -15,7 +15,7 @@ void SententialForm::tokensToSentence(const vector<string> tokens) {
 		for (i = 0; i < table.size(); i++) {
 			if (tokens[0].compare(table[i][0].name) == 0) {
 				/* Keyword, Arithmetic Op, Paren, Brace */
-				if (table[i][0].value == SYMBOL::EPSILON) {
+				if (table[i][0].value == SYMBOL::ERROR) {
 					for (unsigned int j = 1; j < table[i].size(); j++) {
 						if (table[i][j].name == tokens[1]) {
 							sentential.push_back(table[i][j].value);
