@@ -11,10 +11,10 @@ void SententialForm::tokensToSentence(const vector<string> tokens) {
 	
 	try {
 		if (tokens.size() < 2 || tokens.size() > 3)
-			throw Exception("Invalid Symol Table : A line of files is not divided into one or two tokens.", __FILE__, __LINE__);
+			throw Exception("Invalid Symol Table : A line of files(tokenInfo) is not divided into 2 or 3 tokens.", __FILE__, __LINE__);
 
 		if (!isInteger(tokens[0].c_str()))
-			throw Exception("Invalid Symol Table : Line number does not exist.", __FILE__, __LINE__);
+			throw Exception("Invalid Symol Table : A line number(tokens[0]) is not a number.", __FILE__, __LINE__);
 
 		symbol_info.lineNumber = atoi(tokens[0].c_str());
 
@@ -52,15 +52,13 @@ void SententialForm::tokensToSentence(const vector<string> tokens) {
 			}
 		}
 		errorData.push_back(symbol_info);
+
 		if (i == table.size())
-			throw Exception("Invalid Symol Table : TokenName cannot be classified", __FILE__, __LINE__);
+			throw Exception("Invalid Symol Table : The token name(tokens[1]) or token value(tokens[2]) is not properly classified", __FILE__, __LINE__);
 	}
 	catch (Exception e) {
 		e.printMessage();
 	}
-}
-vector<Symbol_Info> SententialForm::getErrorData() {
-	return errorData;
 }
 
 bool SententialForm::isInteger(const string& s)
@@ -76,6 +74,9 @@ bool SententialForm::isInteger(const string& s)
 void SententialForm::pushBack(const SYMBOL symbol) {
 	sentential.push_back(symbol);
 }
+void SententialForm::pushBackErrorData(const Symbol_Info symbol) {
+	errorData.push_back(symbol);
+}
 
 void SententialForm::erase(int start, int end) {
 	sentential.erase(sentential.begin() + start, sentential.begin() + end);
@@ -89,6 +90,10 @@ void SententialForm::eraseErrorData() {
 	errorData.erase(errorData.begin());
 }
 
+// getter
 vector<SYMBOL>& SententialForm::getSentence() {
 	return sentential;
+}
+vector<Symbol_Info> SententialForm::getErrorData() {
+	return errorData;
 }

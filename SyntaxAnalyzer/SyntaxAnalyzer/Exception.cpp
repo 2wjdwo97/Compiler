@@ -14,7 +14,7 @@ Exception::~Exception() {
 }
 
 void Exception::printMessage() {
-	cout << "Exception : " << message << endl << fileName;
+	cout << message << endl << fileName;
 	if (lineNum)
 		cout << "\\line" << lineNum;
 	cout << endl;

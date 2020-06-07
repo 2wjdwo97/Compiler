@@ -43,10 +43,14 @@ public:
 	~SententialForm();
 
 	void tokensToSentence(const vector<string> );
+
 	void pushBack(const SYMBOL);
+	void pushBackErrorData(const Symbol_Info );
+
 	void erase(int, int);
-	void insert(int, SYMBOL);
 	void eraseErrorData();
+	void insert(int, SYMBOL);
+	
 	vector<Symbol_Info> getErrorData();
 	vector<SYMBOL>& getSentence();
 };

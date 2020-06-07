@@ -25,12 +25,18 @@ int main(int argc, char* argv[]) {
 				sentence.tokensToSentence(tokens);
 			}
 
+			/* Add the end part of sentence and error data */
 			sentence.pushBack(SYMBOL::ENDMARKER);
+
+			Symbol_Info endErrorData;
+			endErrorData.lineNumber = sentence.getErrorData()[sentence.getErrorData().size() - 1].lineNumber;
+			endErrorData.tokenValue = "$";
+			sentence.pushBackErrorData(endErrorData);
 
 			/* SLR parsing */
 			parser.SLRparsing(sentence);
 
-			/* print result */
+			/* print a result */
 			if (parser.isAccept(sentence))
 				cout << "ACCEPT : correct sentence" << endl;
 			else
@@ -40,6 +46,7 @@ int main(int argc, char* argv[]) {
 			throw Exception("Cannot open file : ", argv[1]);
 	}
 	catch (Exception e) {
+		/* print error line and unexpected value */
 		cout << "Error Line: " << sentence.getErrorData()[0].lineNumber << endl;
 		cout << "Unexpected Value: " << sentence.getErrorData()[0].tokenValue << endl;
 		e.printMessage();

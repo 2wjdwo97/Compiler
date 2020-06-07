@@ -24,7 +24,6 @@ void SLRparser::SLRparsing(SententialForm& sententialForm) {
 void SLRparser::changeState(SententialForm& sententialForm, const int currentState, const SYMBOL input) {
 	State state = SLRtable_Action[getIndex(currentState, input, SLRtable_Action)].action;
 
-	try {
 		switch (state.action) {
 		/* Make a decision : Shift */
 		case ACTION::SHIFT:
@@ -60,10 +59,6 @@ void SLRparser::changeState(SententialForm& sententialForm, const int currentSta
 		default:
 			throw Exception("CANNOT ACCEPT : ", __FILE__, __LINE__);
 		}
-	}
-	catch (Exception e) {
-		e.printMessage();
-	}
 }
 
 template <class T>
@@ -72,7 +67,7 @@ int SLRparser::getIndex(const int currentState, const SYMBOL inputIndex, const v
 	int index = binarySearch(currentState, SLRtable);
 
 	if (index == -1)
-		throw Exception("CANNOT ACCEPT : No matching ROW found in the sparse matrix. ", __FILE__, __LINE__);
+		throw Exception("CANNOT ACCEPT : No matching ROW found in the SLR parsing table (sparse matrix). ", __FILE__, __LINE__);
 	else
 	{
 		int i;
@@ -88,7 +83,7 @@ int SLRparser::getIndex(const int currentState, const SYMBOL inputIndex, const v
 			else if (SLRtable[i].column == inputIndex)
 				return i;
 		}
-		throw Exception("CANNOT ACCEPT : No matching COLUMN found in the sparse matrix. ", __FILE__, __LINE__);
+		throw Exception("CANNOT ACCEPT : No matching COLUMN found in the SLR parsing table (sparse matrix). ", __FILE__, __LINE__);
 	}
 }
 
