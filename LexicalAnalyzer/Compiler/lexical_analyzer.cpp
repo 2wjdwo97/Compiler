@@ -88,8 +88,8 @@ int main(int argc, char* argv[]) {
 				errorData.push_back(newError);
 			}
 			else {// accept된 dfa가 있고 error가 없다면 그 token의 정보를 파일에 저장
-				WriteToken(&writeFile);
 				readPosition += maxLengthToken.maxLength;
+				WriteToken(&writeFile);
 			}
 
 			// maxLengthToken의 변수들을 초기화
@@ -115,70 +115,73 @@ void WriteToken(ofstream* writeFile) {
 	switch (maxLengthToken.tokenName) {
 	case Keyword:
 		isPreviousTokenOperand = false;
-		*writeFile << "KEYWORD" << "@" << maxLengthToken.tokenValue << endl;
+		*writeFile << "KEYWORD" << "@" << maxLengthToken.tokenValue;
 		break;
 	case VarType:
 		isPreviousTokenOperand = false;
-		*writeFile << "VTYPE" << "@" << maxLengthToken.tokenValue << endl;
+		*writeFile << "VTYPE" << "@" << maxLengthToken.tokenValue;
 		break;
 	case BooleanStr:
 		isPreviousTokenOperand = false;
-		*writeFile << "BOOL" << "@" << maxLengthToken.tokenValue << endl;
+		*writeFile << "BOOL" << "@" << maxLengthToken.tokenValue;
 		break;
 	case Identifier:
 		isPreviousTokenOperand = true;
-		*writeFile << "ID" << "@" << maxLengthToken.tokenValue << endl;
+		*writeFile << "ID" << "@" << maxLengthToken.tokenValue;
 		break;
 	case BitwiseOp:
 		isPreviousTokenOperand = false;
-		*writeFile << "BIT" << "@" << maxLengthToken.tokenValue << endl;
+		*writeFile << "BIT" << "@" << maxLengthToken.tokenValue;
 		break;
 	case ComparisonOp:
 		isPreviousTokenOperand = false;
-		*writeFile << "COMP" << "@" << maxLengthToken.tokenValue << endl;
+		*writeFile << "COMP" << "@" << maxLengthToken.tokenValue;
 		break;
 	case AssignmentOp:
 		isPreviousTokenOperand = false;
-		*writeFile << "ASSIGN" << endl;
+		*writeFile << "ASSIGN";
 		break;
 	case FloatingPoint:
 		isPreviousTokenOperand = true;
-		*writeFile << "FLOAT" << "@" << maxLengthToken.tokenValue << endl;
+		*writeFile << "FLOAT" << "@" << maxLengthToken.tokenValue;
 		break;
 	case LiteralStr:
 		isPreviousTokenOperand = false;
-		*writeFile << "LITERAL" << "@" << maxLengthToken.tokenValue << endl;
+		*writeFile << "LITERAL" << "@" << maxLengthToken.tokenValue;
 		break;
 	case SignedInt:
 		isPreviousTokenOperand = true;
-		*writeFile << "NUM" << "@" << maxLengthToken.tokenValue << endl;
+		*writeFile << "NUM" << "@" << maxLengthToken.tokenValue;
 		break;
 	case ArithmeticOp:
 		isPreviousTokenOperand = false;
-		*writeFile << "ARITHM" << "@" << maxLengthToken.tokenValue << endl;
+		*writeFile << "ARITHM" << "@" << maxLengthToken.tokenValue;
 		break;
 	case Comma:
 		isPreviousTokenOperand = false;
-		*writeFile << "COMMA" << endl;
+		*writeFile << "COMMA";
 		break;
 	case Brace:
 		isPreviousTokenOperand = false;
-		*writeFile << "BRACE" << "@" << maxLengthToken.tokenValue << endl;
+		*writeFile << "BRACE" << "@" << maxLengthToken.tokenValue;
 		break;
 	case Paren:
 		if (maxLengthToken.tokenValue == ")")
 			isPreviousTokenOperand = true;
 		else
 			isPreviousTokenOperand = false;
-		*writeFile << "PAREN" << "@" << maxLengthToken.tokenValue << endl;
+		*writeFile << "PAREN" << "@" << maxLengthToken.tokenValue;
 		break;
 	case Semicolon:
 		isPreviousTokenOperand = false;
-		*writeFile << "SEMI" << endl;
+		*writeFile << "SEMI";
 		break;
 	case Whitespace:
 		countNewLine();
 	}
+
+	if (code[readPosition] != EOF && maxLengthToken.tokenName != Whitespace)
+		*writeFile << endl;
 }
 
 template <class T1, class T2> // T1 char, CharClass, T2 vector<vector<State>>, vector<Element>
