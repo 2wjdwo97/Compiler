@@ -34,7 +34,7 @@ class SententialForm
 {
 private:
 	vector<SYMBOL> sentential;	// sentential form used in the SLR parsing
-	vector<Symbol_Info> errorDate;
+	vector<Symbol_Info> errorData;
 
 	bool isInteger(const string& s);
 
@@ -46,7 +46,8 @@ public:
 	void pushBack(const SYMBOL);
 	void erase(int, int);
 	void insert(int, SYMBOL);
-
+	void eraseErrorData();
+	vector<Symbol_Info> getErrorData();
 	vector<SYMBOL>& getSentence();
 };
 

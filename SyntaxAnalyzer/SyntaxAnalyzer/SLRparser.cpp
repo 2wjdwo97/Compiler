@@ -30,6 +30,8 @@ void SLRparser::changeState(SententialForm& sententialForm, const int currentSta
 		case ACTION::SHIFT:
 			st.push(state.actionNum);										// push the next state into the stack
 			nextInputSymbol = sententialForm.getSentence()[++splitter];		// move the splitter to the right, change the next input sumbol
+			
+			sententialForm.eraseErrorData();
 			break;
 
 		/* Make a decision : Reduce */

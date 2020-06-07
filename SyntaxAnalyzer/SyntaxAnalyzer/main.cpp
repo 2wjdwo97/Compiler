@@ -9,11 +9,11 @@ int main(int argc, char* argv[]) {
 
 	ifstream readFile;
 	readFile.open("test.out");
+	SententialForm sentence;
 
 	try {
 		if (readFile.is_open())
 		{
-			SententialForm sentence;
 			SLRparser parser;
 
 			/* change the output of lexical_analyzer into the sequence of terminals(sentence) */
@@ -40,6 +40,8 @@ int main(int argc, char* argv[]) {
 			throw Exception("Cannot open file : ", argv[1]);
 	}
 	catch (Exception e) {
+		cout << "Error Line: " << sentence.getErrorData()[0].lineNumber << endl;
+		cout << "Unexpected Value: " << sentence.getErrorData()[0].tokenValue << endl;
 		e.printMessage();
 	}
 
