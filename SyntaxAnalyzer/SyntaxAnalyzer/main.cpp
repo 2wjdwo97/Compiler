@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 
 			while (!readFile.eof()) {
 				getline(readFile, line);
-				vector<string> tokens = split(line, ' ');
+				vector<string> tokens = split(line, '@');
 				sentence.tokensToSentence(tokens);
 			}
 

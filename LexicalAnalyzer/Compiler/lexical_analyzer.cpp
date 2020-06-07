@@ -110,32 +110,32 @@ int main(int argc, char* argv[]) {
 	}
 }
 
-void WriteToken(ofstream *writeFile) {
+void WriteToken(ofstream* writeFile) {
 	// file write할 때 tokenName에 따라 각 동작을 수행
 	switch (maxLengthToken.tokenName) {
 	case Keyword:
 		isPreviousTokenOperand = false;
-		*writeFile << "KEYWORD" << " " << maxLengthToken.tokenValue << endl;
+		*writeFile << "KEYWORD" << "@" << maxLengthToken.tokenValue << endl;
 		break;
 	case VarType:
 		isPreviousTokenOperand = false;
-		*writeFile << "VTYPE" << " " << maxLengthToken.tokenValue << endl;
+		*writeFile << "VTYPE" << "@" << maxLengthToken.tokenValue << endl;
 		break;
 	case BooleanStr:
 		isPreviousTokenOperand = false;
-		*writeFile << "BOOL" << " " << maxLengthToken.tokenValue << endl;
+		*writeFile << "BOOL" << "@" << maxLengthToken.tokenValue << endl;
 		break;
 	case Identifier:
 		isPreviousTokenOperand = true;
-		*writeFile << "ID" << " " << maxLengthToken.tokenValue << endl;
+		*writeFile << "ID" << "@" << maxLengthToken.tokenValue << endl;
 		break;
 	case BitwiseOp:
 		isPreviousTokenOperand = false;
-		*writeFile << "BIT" << " " << maxLengthToken.tokenValue << endl;
+		*writeFile << "BIT" << "@" << maxLengthToken.tokenValue << endl;
 		break;
 	case ComparisonOp:
 		isPreviousTokenOperand = false;
-		*writeFile << "COMP" << " " << maxLengthToken.tokenValue << endl;
+		*writeFile << "COMP" << "@" << maxLengthToken.tokenValue << endl;
 		break;
 	case AssignmentOp:
 		isPreviousTokenOperand = false;
@@ -143,19 +143,19 @@ void WriteToken(ofstream *writeFile) {
 		break;
 	case FloatingPoint:
 		isPreviousTokenOperand = true;
-		*writeFile << "FLOAT" << " " << maxLengthToken.tokenValue << endl;
+		*writeFile << "FLOAT" << "@" << maxLengthToken.tokenValue << endl;
 		break;
 	case LiteralStr:
 		isPreviousTokenOperand = false;
-		*writeFile << "LITERAL" << " " << maxLengthToken.tokenValue << endl;
+		*writeFile << "LITERAL" << "@" << maxLengthToken.tokenValue << endl;
 		break;
 	case SignedInt:
 		isPreviousTokenOperand = true;
-		*writeFile << "NUM" << " " << maxLengthToken.tokenValue << endl;
+		*writeFile << "NUM" << "@" << maxLengthToken.tokenValue << endl;
 		break;
 	case ArithmeticOp:
 		isPreviousTokenOperand = false;
-		*writeFile << "ARITHM" << " " << maxLengthToken.tokenValue << endl;
+		*writeFile << "ARITHM" << "@" << maxLengthToken.tokenValue << endl;
 		break;
 	case Comma:
 		isPreviousTokenOperand = false;
@@ -163,14 +163,14 @@ void WriteToken(ofstream *writeFile) {
 		break;
 	case Brace:
 		isPreviousTokenOperand = false;
-		*writeFile << "BRACE" << " " << maxLengthToken.tokenValue << endl;
+		*writeFile << "BRACE" << "@" << maxLengthToken.tokenValue << endl;
 		break;
 	case Paren:
 		if (maxLengthToken.tokenValue == ")")
 			isPreviousTokenOperand = true;
 		else
 			isPreviousTokenOperand = false;
-		*writeFile << "PAREN" << " " << maxLengthToken.tokenValue << endl;
+		*writeFile << "PAREN" << "@" << maxLengthToken.tokenValue << endl;
 		break;
 	case Semicolon:
 		isPreviousTokenOperand = false;
