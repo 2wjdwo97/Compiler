@@ -54,12 +54,12 @@ const vector<vector<SymbolInfo>> table = {
 	{{"FLOAT", SYMBOL::FLOAT}},
 	{{"LITERAL", SYMBOL::LITERAL}},
 	{{"ID", SYMBOL::ID}},
-	{{"KEYWORD", SYMBOL::EPSILON}, {"if", SYMBOL::IF}, {"else", SYMBOL::ELSE}, {"whlie", SYMBOL::WHILE}, {"for", SYMBOL::FOR}, {"return", SYMBOL::RETURN}},
-	{{"ARITHM", SYMBOL::EPSILON}, {"+", SYMBOL::ADDSUB}, {"-", SYMBOL::ADDSUB}, {"*", SYMBOL::MULTDIV}, {"/", SYMBOL::MULTDIV}},
+	{{"KEYWORD", SYMBOL::ERROR}, {"if", SYMBOL::IF}, {"else", SYMBOL::ELSE}, {"whlie", SYMBOL::WHILE}, {"for", SYMBOL::FOR}, {"return", SYMBOL::RETURN}},
+	{{"ARITHM", SYMBOL::ERROR}, {"+", SYMBOL::ADDSUB}, {"-", SYMBOL::ADDSUB}, {"*", SYMBOL::MULTDIV}, {"/", SYMBOL::MULTDIV}},
 	{{"ASSIGN", SYMBOL::ASSIGN}},
 	{{"COMP", SYMBOL::COMP}},
 	{{"SEMI", SYMBOL::SEMI}},
 	{{"COMMA", SYMBOL::COMMA}},
-	{{"PAREN", SYMBOL::EPSILON}, {"(", SYMBOL::LPAREN}, {")", SYMBOL::RPAREN}},
-	{{"BRACE", SYMBOL::EPSILON}, {"{", SYMBOL::LBRACE}, {"}", SYMBOL::RBRACE}}
+	{{"PAREN", SYMBOL::ERROR}, {"(", SYMBOL::LPAREN}, {")", SYMBOL::RPAREN}},
+	{{"BRACE", SYMBOL::ERROR}, {"{", SYMBOL::LBRACE}, {"}", SYMBOL::RBRACE}}
 };

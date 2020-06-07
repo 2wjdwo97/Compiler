@@ -1,9 +1,2 @@
-﻿  SLRparser.cpp
-C:\Users\kio10\Desktop\compiler\SyntaxAnalyzer\SyntaxAnalyzer\SLRparser.cpp(30,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\kio10\Desktop\compiler\SyntaxAnalyzer\SyntaxAnalyzer\SLRparser.cpp(21): message : 컴파일되는 함수 템플릿 인스턴스화 'int SLRparser::toIndex<SYMBOL>(const T,const std::vector<SYMBOL,std::allocator<SYMBOL>>)'에 대한 참조를 확인하세요.
-          with
-          [
-              T=SYMBOL
-          ]
-C:\Users\kio10\Desktop\compiler\SyntaxAnalyzer\SyntaxAnalyzer\SLRparser.cpp(39): warning C4715: 'SLRparser::toIndex<enum SYMBOL>': 모든 제어 경로에서 값을 반환하지는 않습니다.
-  SyntaxAnalyzer.vcxproj -> C:\Users\kio10\Desktop\compiler\SyntaxAnalyzer\Debug\SyntaxAnalyzer.exe
+﻿  SententialForm.cpp
+  SyntaxAnalyzer.vcxproj -> C:\Users\LG\Desktop\정재\3학년\컴파일러\project\Compiler\SyntaxAnalyzer\Debug\SyntaxAnalyzer.exe

@@ -8,7 +8,7 @@ SententialForm::~SententialForm() {
 /* change the output of lexical_analyzer into the sequence of terminals(sentence) */
 void SententialForm::tokensToSentence(const vector<string> tokens) {
 	try {
-		if (tokens.size() != 2)
+		if (tokens.size() > 2)
 			throw Exception("uncorrect symbol table", __FILE__, __LINE__);
 
 		unsigned int i;
