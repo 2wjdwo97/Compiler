@@ -27,7 +27,6 @@ public:
 	bool isAccept(SententialForm&);
 };
 
-
 /* shift-reduce */
 enum class ACTION {
 	SHIFT = 0, REDUCE, EMPTY

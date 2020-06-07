@@ -40,10 +40,15 @@ void SLRparser::changeState(SententialForm& sententialForm, const int currentSta
 				st.pop();
 
 			/* do a reduction of the suffix (right end substring) of the left substring which matches the RHS of a production */
-			sententialForm.erase(splitter - i, splitter);
-			splitter -= i;
-			sententialForm.insert(splitter, CFG[state.actionNum - 1].symbol);
-			splitter++;
+			if (i == 0) {
+				sententialForm.insert(splitter++, CFG[state.actionNum - 1].symbol);
+			}
+			else {
+				sententialForm.erase(splitter - i, splitter);
+				splitter -= i;
+				sententialForm.insert(splitter, CFG[state.actionNum - 1].symbol);
+				splitter++;
+			}
 
 			/* for A -> ес, push GOTO (currentState, A) into the stack */
 			st.push(SLRtable_Goto[getIndex(st.top() - 1, CFG[state.actionNum - 1].symbol, SLRtable_Goto)].stateNum);

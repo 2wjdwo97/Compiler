@@ -23,12 +23,20 @@ enum class SYMBOL {
 	ERROR
 };
 
+typedef struct {
+	string tokenValue;
+	int lineNumber;
+} Symbol_Info;
+
 class Exception;
 
 class SententialForm
 {
 private:
 	vector<SYMBOL> sentential;	// sentential form used in the SLR parsing
+	vector<Symbol_Info> errorDate;
+
+	bool isInteger(const string& s);
 
 public:
 	SententialForm();
