@@ -8,7 +8,6 @@ SLRparser::SLRparser() {
 	st.push(1);	
 	splitter = 0;
 	nextInputSymbol = SYMBOL::ENDMARKER;
-	isFinish = false;
 }
 SLRparser::~SLRparser() {
 }
@@ -16,61 +15,47 @@ SLRparser::~SLRparser() {
 void SLRparser::SLRparsing(SententialForm& sententialForm) {
 	nextInputSymbol = sententialForm.getSentence()[0];
 
-	while (!isFinish) {
+	do {
 		changeState(sententialForm, st.top() - 1, nextInputSymbol);
 
-		if (checkAccept(sententialForm))	break;
-	}
-}
-
-template <class T>
-int SLRparser::toIndex(const T symbol, const vector<T> inputList) {
-	try {
-		for (int i = 0; i < inputList.size(); i++) {
-			if (inputList[i] == symbol)
-				return i;	// return index
-		}
-		throw Exception("uncorrect input symbol", __FILE__, __LINE__);
-	}
-	catch (Exception e) {
-		e.printMessage();
-	}
+	} while (!isAccept(sententialForm));
 }
 
 void SLRparser::changeState(SententialForm& sententialForm, const int currentState, const SYMBOL input) {
 	State state = SLRtable_Action[getIndex(currentState, input, SLRtable_Action)].action;
-	
-	switch (state.action) {
-	/* Make a decision : Shift */
-	case ACTION::SHIFT:	
-		st.push(state.actionNum);										// push the next state into the stack
-		nextInputSymbol = sententialForm.getSentence()[++splitter];		// move the splitter to the right, change the next input sumbol
-		break;
 
-	/* Make a decision : Reduce */
-	case ACTION::REDUCE:
-		/* for A -> メ, pop |メ| contents from the stack */
-		int i;
-		for (i = 0; i < CFG[state.actionNum - 1].length; i++)
-			st.pop();
+	try {
+		switch (state.action) {
+		/* Make a decision : Shift */
+		case ACTION::SHIFT:
+			st.push(state.actionNum);										// push the next state into the stack
+			nextInputSymbol = sententialForm.getSentence()[++splitter];		// move the splitter to the right, change the next input sumbol
+			break;
 
-		/* do a reduction of the suffix (right end substring) of the left substring which matches the RHS of a production */
-		sententialForm.erase(splitter - i, splitter);
-		splitter -= i;
-		sententialForm.insert(splitter, CFG[state.actionNum - 1].symbol);
-		splitter++;
+		/* Make a decision : Reduce */
+		case ACTION::REDUCE:
+			/* for A -> メ, pop |メ| contents from the stack */
+			int i;
+			for (i = 0; i < CFG[state.actionNum - 1].length; i++)
+				st.pop();
 
-		/* for A -> メ, push GOTO (currentState, A) into the stack */
-		st.push(SLRtable_Goto[getIndex(st.top() - 1, CFG[state.actionNum - 1].symbol, SLRtable_Goto)].stateNum);
+			/* do a reduction of the suffix (right end substring) of the left substring which matches the RHS of a production */
+			sententialForm.erase(splitter - i, splitter);
+			splitter -= i;
+			sententialForm.insert(splitter, CFG[state.actionNum - 1].symbol);
+			splitter++;
 
-		if (st.top() == 0 && !checkAccept(sententialForm))
-			isFinish = true;
-		break;
+			/* for A -> メ, push GOTO (currentState, A) into the stack */
+			st.push(SLRtable_Goto[getIndex(st.top() - 1, CFG[state.actionNum - 1].symbol, SLRtable_Goto)].stateNum);
+			break;
 
-	/* Error */
-	case ACTION::EMPTY:
-		isFinish = true;
-		break;
+		/* Error */
+		default:
+			throw Exception("CANNOT ACCEPT : ", __FILE__, __LINE__);
+		}
+	}
+	catch (Exception e) {
+		e.printMessage();
 	}
 }
 
@@ -80,10 +65,11 @@ int SLRparser::getIndex(const int currentState, const SYMBOL inputIndex, const v
 	int index = binarySearch(currentState, SLRtable);
 
 	if (index == -1)
-		return -1;
+		throw Exception("CANNOT ACCEPT : No matching ROW found in the sparse matrix. ", __FILE__, __LINE__);
 	else
 	{
-		for (int i = index; i >= 0; i--) {
+		int i;
+		for (i = index; i >= 0; i--) {
 			if (SLRtable[i].row != currentState)
 				break;
 			else if (SLRtable[i].column == inputIndex)
@@ -95,7 +81,7 @@ int SLRparser::getIndex(const int currentState, const SYMBOL inputIndex, const v
 			else if (SLRtable[i].column == inputIndex)
 				return i;
 		}
-		return -1;
+		throw Exception("CANNOT ACCEPT : No matching COLUMN found in the sparse matrix. ", __FILE__, __LINE__);
 	}
 }
 
@@ -116,13 +102,9 @@ int SLRparser::binarySearch(const int state, vector<T> SLRtable)
 	return -1;
 }
 
-bool SLRparser::checkAccept(SententialForm &sententialForm) {
-	if (sententialForm.getSentence()[0] == SYMBOL::START && sententialForm.getSentence()[1] == SYMBOL::ENDMARKER)
+bool SLRparser::isAccept(SententialForm &sententialForm) {
+	if (sententialForm.getSentence()[0] == SYMBOL::START && sententialForm.getSentence()[1] == SYMBOL::ENDMARKER && sententialForm.getSentence().size() == 2)
 		return true;
 	else
 		return false;
-}
-
-bool SLRparser::getIsFinish() {
-	return isFinish;
 }

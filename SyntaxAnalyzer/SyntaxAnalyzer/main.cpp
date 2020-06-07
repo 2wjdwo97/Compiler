@@ -24,19 +24,20 @@ int main(int argc, char* argv[]) {
 				vector<string> tokens = split(line, ' ');
 				sentence.tokensToSentence(tokens);
 			}
+
 			sentence.pushBack(SYMBOL::ENDMARKER);
 
 			/* SLR parsing */
 			parser.SLRparsing(sentence);
 
 			/* print result */
-			if (!parser.getIsFinish())
+			if (parser.isAccept(sentence))
 				cout << "ACCEPT : correct sentence" << endl;
 			else
 				cout << "CANNOT ACCEPT : uncorrenct sentence" << endl;
 		}
 		else
-			throw Exception("Cannot open file : ", "argv[1]");
+			throw Exception("Cannot open file : ", argv[1]);
 	}
 	catch (Exception e) {
 		e.printMessage();

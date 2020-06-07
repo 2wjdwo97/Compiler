@@ -12,25 +12,19 @@ private:
 	stack<int> st;					// stack
 	SYMBOL nextInputSymbol;			// next input symbol
 	int splitter;					// splitter
-	bool isFinish;					// check if parsing is finished
+
+	void changeState(SententialForm&, const int, const SYMBOL);
+	template <class T>
+	int getIndex(const int currentState, const SYMBOL inputIndex, const vector<T> SLRtable_Action);
+	template <class T>
+	int binarySearch(const int, vector<T>);
 
 public:
 	SLRparser();
 	~SLRparser();
 
-	template <class T>
-	int toIndex(const T, const vector<T>);
-	template <class T>
-	int binarySearch(const int, vector<T>);
-
 	void SLRparsing(SententialForm&);
-	void changeState(SententialForm&, const int, const SYMBOL);
-
-	bool getIsFinish();
-	bool checkAccept(SententialForm&);
-
-	template <class T>
-	int getIndex(const int currentState, const SYMBOL inputIndex, const vector<T> SLRtable_Action);
+	bool isAccept(SententialForm&);
 };
 
 
@@ -46,11 +40,12 @@ typedef struct {
 } State;
 
 /* SLR parsing table (ACION part) */
-const vector<SYMBOL> inputSymbolList_Action = { SYMBOL::VTYPE, SYMBOL::NUM, SYMBOL::FLOAT, SYMBOL::LITERAL, SYMBOL::ID, 
-												SYMBOL:: IF, SYMBOL:: ELSE, SYMBOL:: WHILE, SYMBOL:: FOR, SYMBOL:: RETURN, 
-												SYMBOL:: ADDSUB, SYMBOL:: MULTDIV, SYMBOL:: ASSIGN, SYMBOL:: COMP, SYMBOL:: SEMI, 
-												SYMBOL:: COMMA, SYMBOL:: LPAREN, SYMBOL:: RPAREN, SYMBOL:: LBRACE, SYMBOL:: RBRACE, 
-												SYMBOL:: ENDMARKER};
+const vector<SYMBOL> inputSymbolList_Action = {
+	SYMBOL::VTYPE, SYMBOL::NUM, SYMBOL::FLOAT, SYMBOL::LITERAL, SYMBOL::ID, 
+	SYMBOL:: IF, SYMBOL:: ELSE, SYMBOL:: WHILE, SYMBOL:: FOR, SYMBOL:: RETURN, 
+	SYMBOL:: ADDSUB, SYMBOL:: MULTDIV, SYMBOL:: ASSIGN, SYMBOL:: COMP, SYMBOL:: SEMI, 
+	SYMBOL:: COMMA, SYMBOL:: LPAREN, SYMBOL:: RPAREN, SYMBOL:: LBRACE, SYMBOL:: RBRACE, 
+	SYMBOL:: ENDMARKER};
 
 /*  */
 typedef struct{
@@ -60,7 +55,7 @@ typedef struct{
 } SLRTable;
 
 const vector<SLRTable> SLRtable_Action = {
-	{ 0,	SYMBOL::VTYPE,		{ACTION::SHIFT,		6}},
+	{ 0,	SYMBOL::VTYPE,		{ACTION::SHIFT,		6}}, //0
 	{ 0,	SYMBOL::ENDMARKER,	{ACTION::REDUCE,	4}},
 	{ 1,	SYMBOL::VTYPE,		{ACTION::SHIFT,		6}},
 	{ 1,	SYMBOL::ENDMARKER,	{ACTION::REDUCE,	4}},
@@ -70,7 +65,7 @@ const vector<SLRTable> SLRtable_Action = {
 	{ 4,	SYMBOL::ENDMARKER,	{ACTION::REDUCE,	3}},
 	{ 5,	SYMBOL::ID,			{ACTION::SHIFT,		9}},
 	{ 6,	SYMBOL::SEMI,		{ACTION::SHIFT,		8}},
-	{ 7,	SYMBOL::VTYPE,		{ACTION::REDUCE,	6}},
+	{ 7,	SYMBOL::VTYPE,		{ACTION::REDUCE,	6}}, //10
 	{ 7,	SYMBOL::IF,			{ACTION::REDUCE,	6}},
 	{ 7,	SYMBOL::WHILE,		{ACTION::REDUCE,	6}},
 	{ 7,	SYMBOL::FOR,		{ACTION::REDUCE,	6}},
@@ -80,7 +75,7 @@ const vector<SLRTable> SLRtable_Action = {
 	{ 8,	SYMBOL::ASSIGN,		{ACTION::SHIFT,		69}},
 	{ 8,	SYMBOL::SEMI,		{ACTION::SHIFT,		10}},
 	{ 8,	SYMBOL::LPAREN,		{ACTION::SHIFT,		11}},
-	{ 9,	SYMBOL::VTYPE,		{ACTION::REDUCE,	5}},
+	{ 9,	SYMBOL::VTYPE,		{ACTION::REDUCE,	5}}, //20
 	{ 9,	SYMBOL::IF,			{ACTION::REDUCE,	5}},
 	{ 9,	SYMBOL::WHILE,		{ACTION::REDUCE,	5}},
 	{ 9,	SYMBOL::FOR,		{ACTION::REDUCE,	5}},
@@ -90,7 +85,7 @@ const vector<SLRTable> SLRtable_Action = {
 	{ 10,	SYMBOL::VTYPE,		{ACTION::SHIFT,		12}},
 	{ 10,	SYMBOL::RPAREN,		{ACTION::REDUCE,	10}},
 	{ 11,	SYMBOL::ID,			{ACTION::SHIFT,		13}},
-	{ 12,	SYMBOL::COMMA,		{ACTION::SHIFT,		15}},
+	{ 12,	SYMBOL::COMMA,		{ACTION::SHIFT,		15}}, //30
 	{ 12,	SYMBOL::RPAREN,		{ACTION::REDUCE,	12}},
 	{ 13,	SYMBOL::RPAREN,		{ACTION::REDUCE,	9}},
 	{ 14,	SYMBOL::VTYPE,		{ACTION::SHIFT,		16}},
@@ -100,7 +95,7 @@ const vector<SLRTable> SLRtable_Action = {
 	{ 17,	SYMBOL::RPAREN,		{ACTION::REDUCE,	11}},
 	{ 18,	SYMBOL::RPAREN,		{ACTION::SHIFT,		20}},
 	{ 19,	SYMBOL::LBRACE,		{ACTION::SHIFT,		21}},
-	{ 20,	SYMBOL::VTYPE,		{ACTION::SHIFT,		22}},
+	{ 20,	SYMBOL::VTYPE,		{ACTION::SHIFT,		22}}, // 40
 	{ 20,	SYMBOL::ID,			{ACTION::SHIFT,		27}},
 	{ 20,	SYMBOL::IF,			{ACTION::SHIFT,		28}},
 	{ 20,	SYMBOL::WHILE,		{ACTION::SHIFT,		51}},
@@ -305,9 +300,11 @@ const vector<SLRTable> SLRtable_Action = {
 	{ 84,	SYMBOL::ENDMARKER,	{ACTION::REDUCE,	1} }
 };
 /* SLR parsing table (GOTO part) */
-const vector<SYMBOL> inputSymbolList_Goto = {	SYMBOL::CODE, SYMBOL::VDECL, SYMBOL::FDECL, SYMBOL::ARG, SYMBOL::MOREARGS,
-												SYMBOL::BLOCK, SYMBOL:: STMT, SYMBOL:: ASSIGN, SYMBOL:: RHS, SYMBOL:: EXPR,
-												SYMBOL:: TERM, SYMBOL:: FACTOR, SYMBOL:: COND, SYMBOL:: RETURN, SYMBOL:: ELSE};
+const vector<SYMBOL> inputSymbolList_Goto = {
+	SYMBOL::CODE, SYMBOL::VDECL, SYMBOL::FDECL, SYMBOL::ARG, SYMBOL::MOREARGS,								
+	SYMBOL::BLOCK, SYMBOL:: STMT, SYMBOL:: ASSIGN, SYMBOL:: RHS, SYMBOL:: EXPR,
+	SYMBOL:: TERM, SYMBOL:: FACTOR, SYMBOL:: COND, SYMBOL:: RETURN, SYMBOL:: ELSE};
+
 typedef struct {
 	int row;
 	SYMBOL column;
@@ -318,6 +315,7 @@ const vector<SRLTable_GoTo> SLRtable_Goto = {
 	{0,		SYMBOL::CODE,		85},
 	{0,		SYMBOL::VDECL,		2},
 	{0,		SYMBOL::FDECL,		4},
+	{0,		SYMBOL::START,		-1}, //dummy
 	{1,		SYMBOL::CODE,		3},
 	{1,		SYMBOL::VDECL,		2},
 	{1,		SYMBOL::FDECL,		4},
@@ -325,7 +323,7 @@ const vector<SRLTable_GoTo> SLRtable_Goto = {
 	{3,		SYMBOL::VDECL,		2},
 	{3,		SYMBOL::FDECL,		4},
 	{5,		SYMBOL::ASSIGN_NON,	7},
-	{10,	SYMBOL::ARG,		19},
+	{10,	SYMBOL::ARG,		19}, //10
 	{12,	SYMBOL::MOREARGS,	14},
 	{16,	SYMBOL::MOREARGS,	18},
 	{20,	SYMBOL::VDECL,		24},
@@ -335,7 +333,7 @@ const vector<SRLTable_GoTo> SLRtable_Goto = {
 	{21,	SYMBOL::ASSIGN_NON,	7},
 	{28,	SYMBOL::FACTOR,		42},
 	{28,	SYMBOL::COND,		32},
-	{29,	SYMBOL::VDECL,		24},
+	{29,	SYMBOL::VDECL,		24}, //20
 	{29,	SYMBOL::BLOCK,		31},
 	{29,	SYMBOL::STMT,		30},
 	{29,	SYMBOL::ASSIGN_NON,	25},
@@ -345,7 +343,7 @@ const vector<SRLTable_GoTo> SLRtable_Goto = {
 	{33,	SYMBOL::ASSIGN_NON,	25},
 	{35,	SYMBOL::ELSE_NON,	37},
 	{38,	SYMBOL::VDECL,		24},
-	{38,	SYMBOL::BLOCK,		40},
+	{38,	SYMBOL::BLOCK,		40}, //30
 	{38,	SYMBOL::STMT,		30},
 	{38,	SYMBOL::ASSIGN_NON,	25},
 	{42,	SYMBOL::FACTOR,		44},
@@ -393,7 +391,7 @@ const vector<Production> CFG = {
 	{SYMBOL::CODE,		0},
 	{SYMBOL::VDECL,		3},
 	{SYMBOL::VDECL,		3},
-	{SYMBOL::ASSIGN,	3},
+	{SYMBOL::ASSIGN_NON,3},
 	{SYMBOL::FDECL,		9},
 	{SYMBOL::ARG,		3},
 	{SYMBOL::ARG,		0},
@@ -406,8 +404,8 @@ const vector<Production> CFG = {
 	{SYMBOL::STMT,		8},
 	{SYMBOL::STMT,		7},
 	{SYMBOL::STMT,		11},
-	{SYMBOL::ELSE,		4},
-	{SYMBOL::ELSE,		0},
+	{SYMBOL::ELSE_NON,	4},
+	{SYMBOL::ELSE_NON,	0},
 	{SYMBOL::RHS,		1},
 	{SYMBOL::RHS,		1},
 	{SYMBOL::EXPR,		3},
@@ -419,32 +417,5 @@ const vector<Production> CFG = {
 	{SYMBOL::FACTOR,	1},
 	{SYMBOL::FACTOR,	1},
 	{SYMBOL::COND,		3},
-	{SYMBOL::RETURN,	3}
+	{SYMBOL::RETURN_NON,3}
 };
-//
-//const vector<vector<SYMBOL>> CFG = {
-//	{SYMBOL::CODE, SYMBOL::VDECL, SYMBOL::CODE},
-//	{SYMBOL::CODE, SYMBOL::FDECL, SYMBOL::CODE},
-//	{SYMBOL::CODE, SYMBOL::ERROR},
-//
-//	{SYMBOL::VDECL, SYMBOL::VTYPE, SYMBOL::ID, SYMBOL::SEMI},
-//	{SYMBOL::VDECL, SYMBOL::VTYPE, SYMBOL::ASSIGN_NON, SYMBOL::SEMI},
-//
-//	{SYMBOL::ASSIGN_NON, SYMBOL::ID, SYMBOL::ASSIGN, SYMBOL::RHS},
-//
-//	{SYMBOL::FDECL, SYMBOL::VTYPE, SYMBOL::ID, SYMBOL::LPAREN, SYMBOL::ARG, SYMBOL::RPAREN, SYMBOL::LBRACE, SYMBOL::BLOCK, SYMBOL::RETURN_NON, SYMBOL::RBRACE},
-//
-//	{SYMBOL::ARG, SYMBOL::VTYPE, SYMBOL::ID, SYMBOL::MOREARGS},
-//	{SYMBOL::ARG, SYMBOL::ERROR},
-//
-//	{SYMBOL::MOREARGS, SYMBOL::COMMA, SYMBOL::VTYPE, SYMBOL::ID, SYMBOL::MOREARGS},
-//	{SYMBOL::MOREARGS, SYMBOL::ERROR},
-//
-//	{SYMBOL::BLOCK, SYMBOL::STMT, SYMBOL::BLOCK},
-//	{SYMBOL::BLOCK, SYMBOL::ERROR},
-//
-//	{SYMBOL::STMT, SYMBOL::VDECL},
-//	{SYMBOL::STMT, SYMBOL::ASSIGN, SYMBOL::SEMI},
-//	{SYMBOL::STMT, SYMBOL::IF, SYMBOL::LPAREN, SYMBOL::COND, SYMBOL::RPAREN, SYMBOL::LBRACE, SYMBOL::BLOCK, SYMBOL::RBRACE, SYMBOL::ELSE},
-//	{SYMBOL::STMT, SYMBOL::WHILE, SYMBOL::LPAREN, SYMBOL::COND, SYMBOL::RPAREN, SYMBOL::LBRACE, SYMBOL::BLOCK, SYMBOL::RBRACE, SYMBOL::ELSE}
-//};
