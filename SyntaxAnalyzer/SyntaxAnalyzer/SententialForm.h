@@ -54,7 +54,7 @@ const vector<vector<SymbolInfo>> table = {
 	{{"FLOAT", SYMBOL::FLOAT}},
 	{{"LITERAL", SYMBOL::LITERAL}},
 	{{"ID", SYMBOL::ID}},
-	{{"KEYWORD", SYMBOL::ERROR}, {"if", SYMBOL::IF}, {"else", SYMBOL::ELSE}, {"whlie", SYMBOL::WHILE}, {"for", SYMBOL::FOR}, {"return", SYMBOL::RETURN}},
+	{{"KEYWORD", SYMBOL::ERROR}, {"if", SYMBOL::IF}, {"else", SYMBOL::ELSE}, {"while", SYMBOL::WHILE}, {"for", SYMBOL::FOR}, {"return", SYMBOL::RETURN}},
 	{{"ARITHM", SYMBOL::ERROR}, {"+", SYMBOL::ADDSUB}, {"-", SYMBOL::ADDSUB}, {"*", SYMBOL::MULTDIV}, {"/", SYMBOL::MULTDIV}},
 	{{"ASSIGN", SYMBOL::ASSIGN}},
 	{{"COMP", SYMBOL::COMP}},

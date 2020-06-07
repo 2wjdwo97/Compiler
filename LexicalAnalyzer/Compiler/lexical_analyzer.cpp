@@ -112,6 +112,9 @@ int main(int argc, char* argv[]) {
 
 void WriteToken(ofstream* writeFile) {
 	// file write할 때 tokenName에 따라 각 동작을 수행
+	if (maxLengthToken.tokenName != Whitespace)
+		*writeFile << currentLine << "@";
+
 	switch (maxLengthToken.tokenName) {
 	case Keyword:
 		isPreviousTokenOperand = false;
