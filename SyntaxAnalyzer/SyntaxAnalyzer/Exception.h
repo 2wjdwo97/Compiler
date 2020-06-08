@@ -10,6 +10,7 @@ private:
 	int lineNum;
 
 public:
+	Exception(string);
 	Exception(string, string);
 	Exception(string, string, int);
 	~Exception();

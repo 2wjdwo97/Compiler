@@ -26,15 +26,15 @@ enum class SYMBOL {
 typedef struct {
 	string tokenValue;
 	int lineNumber;
-} Symbol_Info;
+} SymbolErrorInfo;
 
 class Exception;
 
 class SententialForm
 {
 private:
-	vector<SYMBOL> sentential;	// sentential form used in the SLR parsing
-	vector<Symbol_Info> errorData;
+	vector<SYMBOL> sentential;		// sentential form used in the SLR parsing
+	vector<SymbolErrorInfo> errorData;	// errorData of symbols
 
 	bool isInteger(const string& s);
 
@@ -45,13 +45,13 @@ public:
 	void tokensToSentence(const vector<string> );
 
 	void pushBack(const SYMBOL);
-	void pushBackErrorData(const Symbol_Info );
+	void pushBackErrorData(const SymbolErrorInfo);
 
 	void erase(int, int);
 	void eraseErrorData();
 	void insert(int, SYMBOL);
 	
-	vector<Symbol_Info> getErrorData();
+	vector<SymbolErrorInfo> getErrorData();
 	vector<SYMBOL>& getSentence();
 };
 

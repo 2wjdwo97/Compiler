@@ -7,7 +7,7 @@ SententialForm::~SententialForm() {
 
 /* change the output of lexical_analyzer into the sequence of terminals(sentence) */
 void SententialForm::tokensToSentence(const vector<string> tokens) {
-	Symbol_Info symbol_info;
+	SymbolErrorInfo symbol_info;
 	
 	try {
 		if (tokens.size() < 2 || tokens.size() > 3)
@@ -31,6 +31,7 @@ void SententialForm::tokensToSentence(const vector<string> tokens) {
 						}
 					}
 				}
+				/* else */
 				else if (table[i][0].value == SYMBOL::ASSIGN) {
 					symbol_info.tokenValue = "=";
 					sentential.push_back(table[i][0].value);
@@ -43,7 +44,6 @@ void SententialForm::tokensToSentence(const vector<string> tokens) {
 					symbol_info.tokenValue = ",";
 					sentential.push_back(table[i][0].value);
 				}
-				/* else */
 				else{
 					symbol_info.tokenValue = tokens[2];
 					sentential.push_back(table[i][0].value);
@@ -74,7 +74,7 @@ bool SententialForm::isInteger(const string& s)
 void SententialForm::pushBack(const SYMBOL symbol) {
 	sentential.push_back(symbol);
 }
-void SententialForm::pushBackErrorData(const Symbol_Info symbol) {
+void SententialForm::pushBackErrorData(const SymbolErrorInfo symbol) {
 	errorData.push_back(symbol);
 }
 
@@ -94,6 +94,6 @@ void SententialForm::eraseErrorData() {
 vector<SYMBOL>& SententialForm::getSentence() {
 	return sentential;
 }
-vector<Symbol_Info> SententialForm::getErrorData() {
+vector<SymbolErrorInfo> SententialForm::getErrorData() {
 	return errorData;
 }

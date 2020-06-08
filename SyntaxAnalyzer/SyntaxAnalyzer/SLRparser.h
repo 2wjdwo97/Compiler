@@ -29,7 +29,7 @@ public:
 
 /* shift-reduce */
 enum class ACTION {
-	SHIFT = 0, REDUCE, EMPTY
+	SHIFT = 0, REDUCE
 };
 
 /* a state of SLR parsing table */
@@ -38,22 +38,14 @@ typedef struct {
 	int actionNum = -1;
 } State;
 
-/* SLR parsing table (ACION part) */
-const vector<SYMBOL> inputSymbolList_Action = {
-	SYMBOL::VTYPE, SYMBOL::NUM, SYMBOL::FLOAT, SYMBOL::LITERAL, SYMBOL::ID, 
-	SYMBOL:: IF, SYMBOL:: ELSE, SYMBOL:: WHILE, SYMBOL:: FOR, SYMBOL:: RETURN, 
-	SYMBOL:: ADDSUB, SYMBOL:: MULTDIV, SYMBOL:: ASSIGN, SYMBOL:: COMP, SYMBOL:: SEMI, 
-	SYMBOL:: COMMA, SYMBOL:: LPAREN, SYMBOL:: RPAREN, SYMBOL:: LBRACE, SYMBOL:: RBRACE, 
-	SYMBOL:: ENDMARKER};
-
-/*  */
+/* an element of the sparse matrix (SLR parsing table) */
 typedef struct{
 	int row;
 	SYMBOL column;
 	State action;
-} SLRTable;
+} SLRTable_Action;
 
-const vector<SLRTable> SLRtable_Action = {
+const vector<SLRTable_Action> SLRtable_Action = {
 	{ 0,	SYMBOL::VTYPE,		{ACTION::SHIFT,		6}}, //0
 	{ 0,	SYMBOL::ENDMARKER,	{ACTION::REDUCE,	4}},
 	{ 1,	SYMBOL::VTYPE,		{ACTION::SHIFT,		6}},
@@ -298,12 +290,8 @@ const vector<SLRTable> SLRtable_Action = {
 	{ 83,	SYMBOL::RPAREN,		{ACTION::REDUCE,	26} },
 	{ 84,	SYMBOL::ENDMARKER,	{ACTION::REDUCE,	1} }
 };
-/* SLR parsing table (GOTO part) */
-const vector<SYMBOL> inputSymbolList_Goto = {
-	SYMBOL::CODE, SYMBOL::VDECL, SYMBOL::FDECL, SYMBOL::ARG, SYMBOL::MOREARGS,								
-	SYMBOL::BLOCK, SYMBOL:: STMT, SYMBOL:: ASSIGN, SYMBOL:: RHS, SYMBOL:: EXPR,
-	SYMBOL:: TERM, SYMBOL:: FACTOR, SYMBOL:: COND, SYMBOL:: RETURN, SYMBOL:: ELSE};
 
+/* SLR parsing table (GOTO part) */
 typedef struct {
 	int row;
 	SYMBOL column;

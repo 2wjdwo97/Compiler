@@ -23,7 +23,7 @@ char take_an_exam(int score, char english, int giveMoney) {
             }
         }
         else {
-            while (giveMoney < 2000000) {
+            while (giveMoney < 123456) {
                 temp = "F";
             }
         }
