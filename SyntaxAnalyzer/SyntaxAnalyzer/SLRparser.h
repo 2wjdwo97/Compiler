@@ -46,7 +46,7 @@ typedef struct{
 } SLRTable_Action;
 
 const vector<SLRTable_Action> SLRtable_Action = {
-	{ 0,	SYMBOL::VTYPE,		{ACTION::SHIFT,		6}}, //0
+	{ 0,	SYMBOL::VTYPE,		{ACTION::SHIFT,		6}},
 	{ 0,	SYMBOL::ENDMARKER,	{ACTION::REDUCE,	4}},
 	{ 1,	SYMBOL::VTYPE,		{ACTION::SHIFT,		6}},
 	{ 1,	SYMBOL::ENDMARKER,	{ACTION::REDUCE,	4}},
@@ -56,7 +56,8 @@ const vector<SLRTable_Action> SLRtable_Action = {
 	{ 4,	SYMBOL::ENDMARKER,	{ACTION::REDUCE,	3}},
 	{ 5,	SYMBOL::ID,			{ACTION::SHIFT,		9}},
 	{ 6,	SYMBOL::SEMI,		{ACTION::SHIFT,		8}},
-	{ 7,	SYMBOL::VTYPE,		{ACTION::REDUCE,	6}}, //10
+	{ 7,	SYMBOL::VTYPE,		{ACTION::REDUCE,	6}},
+	{ 7,	SYMBOL::ID,			{ACTION::REDUCE,	6}},
 	{ 7,	SYMBOL::IF,			{ACTION::REDUCE,	6}},
 	{ 7,	SYMBOL::WHILE,		{ACTION::REDUCE,	6}},
 	{ 7,	SYMBOL::FOR,		{ACTION::REDUCE,	6}},
@@ -66,7 +67,8 @@ const vector<SLRTable_Action> SLRtable_Action = {
 	{ 8,	SYMBOL::ASSIGN,		{ACTION::SHIFT,		69}},
 	{ 8,	SYMBOL::SEMI,		{ACTION::SHIFT,		10}},
 	{ 8,	SYMBOL::LPAREN,		{ACTION::SHIFT,		11}},
-	{ 9,	SYMBOL::VTYPE,		{ACTION::REDUCE,	5}}, //20
+	{ 9,	SYMBOL::VTYPE,		{ACTION::REDUCE,	5}},
+	{ 9,	SYMBOL::ID,			{ACTION::REDUCE,	5}},
 	{ 9,	SYMBOL::IF,			{ACTION::REDUCE,	5}},
 	{ 9,	SYMBOL::WHILE,		{ACTION::REDUCE,	5}},
 	{ 9,	SYMBOL::FOR,		{ACTION::REDUCE,	5}},
@@ -76,7 +78,7 @@ const vector<SLRTable_Action> SLRtable_Action = {
 	{ 10,	SYMBOL::VTYPE,		{ACTION::SHIFT,		12}},
 	{ 10,	SYMBOL::RPAREN,		{ACTION::REDUCE,	10}},
 	{ 11,	SYMBOL::ID,			{ACTION::SHIFT,		13}},
-	{ 12,	SYMBOL::COMMA,		{ACTION::SHIFT,		15}}, //30
+	{ 12,	SYMBOL::COMMA,		{ACTION::SHIFT,		15}},
 	{ 12,	SYMBOL::RPAREN,		{ACTION::REDUCE,	12}},
 	{ 13,	SYMBOL::RPAREN,		{ACTION::REDUCE,	9}},
 	{ 14,	SYMBOL::VTYPE,		{ACTION::SHIFT,		16}},
@@ -86,7 +88,7 @@ const vector<SLRTable_Action> SLRtable_Action = {
 	{ 17,	SYMBOL::RPAREN,		{ACTION::REDUCE,	11}},
 	{ 18,	SYMBOL::RPAREN,		{ACTION::SHIFT,		20}},
 	{ 19,	SYMBOL::LBRACE,		{ACTION::SHIFT,		21}},
-	{ 20,	SYMBOL::VTYPE,		{ACTION::SHIFT,		22}}, // 40
+	{ 20,	SYMBOL::VTYPE,		{ACTION::SHIFT,		22}},
 	{ 20,	SYMBOL::ID,			{ACTION::SHIFT,		27}},
 	{ 20,	SYMBOL::IF,			{ACTION::SHIFT,		28}},
 	{ 20,	SYMBOL::WHILE,		{ACTION::SHIFT,		51}},
@@ -372,36 +374,36 @@ typedef struct {
 } Production;
 
 const vector<Production> CFG = {
-	{SYMBOL::START,		1},
+	{SYMBOL::START,		1},//1
 	{SYMBOL::CODE,		2},
 	{SYMBOL::CODE,		2},
 	{SYMBOL::CODE,		0},
-	{SYMBOL::VDECL,		3},
+	{SYMBOL::VDECL,		3},//5
 	{SYMBOL::VDECL,		3},
 	{SYMBOL::ASSIGN_NON,3},
 	{SYMBOL::FDECL,		9},
 	{SYMBOL::ARG,		3},
-	{SYMBOL::ARG,		0},
+	{SYMBOL::ARG,		0},//10
 	{SYMBOL::MOREARGS,	4},
 	{SYMBOL::MOREARGS,	0},
 	{SYMBOL::BLOCK,		2},
 	{SYMBOL::BLOCK,		0},
-	{SYMBOL::STMT,		1},
+	{SYMBOL::STMT,		1},//15
 	{SYMBOL::STMT,		2},
 	{SYMBOL::STMT,		8},
 	{SYMBOL::STMT,		7},
 	{SYMBOL::STMT,		11},
-	{SYMBOL::ELSE_NON,	4},
+	{SYMBOL::ELSE_NON,	4},//20
 	{SYMBOL::ELSE_NON,	0},
 	{SYMBOL::RHS,		1},
 	{SYMBOL::RHS,		1},
 	{SYMBOL::EXPR,		3},
-	{SYMBOL::EXPR,		1},
+	{SYMBOL::EXPR,		1},//25
 	{SYMBOL::TERM,		3},
 	{SYMBOL::TERM,		1},
 	{SYMBOL::FACTOR,	3},
 	{SYMBOL::FACTOR,	1},
-	{SYMBOL::FACTOR,	1},
+	{SYMBOL::FACTOR,	1},//30
 	{SYMBOL::FACTOR,	1},
 	{SYMBOL::COND,		3},
 	{SYMBOL::RETURN_NON,3}
